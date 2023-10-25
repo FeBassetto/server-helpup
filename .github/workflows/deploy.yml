@@ -12,22 +12,13 @@ jobs:
 
     steps:
       - name: Checkout código
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.7.0
         with:
-          node-version: 18.16.1
-          cache: 'yarn'
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Instalar dependências
-        run: yarn install --frozen-lockfile
-
-      - name: Construir projeto
-        run: yarn build
-
-      - name: Parar o PM2
-        run: pm2 stop server || true
-
-      - name: Iniciar o PM2
-        run: pm2 start build/server.js
+      - name: SSH into Digital Ocean and Execute Commands
+        run: |
+          ssh root@157.230.200.236 "cd server-helpup && yarn build && yarn start && p2m restart server"
