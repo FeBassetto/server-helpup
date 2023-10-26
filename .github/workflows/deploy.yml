@@ -14,13 +14,15 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v3
 
-      - name: Create SSH key
-        env:
-          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-        run: |
-          echo "$SSH_PRIVATE_KEY" > private.key
-          sudo chmod 400 private.key
-
-      - name: SSH into Digital Ocean and Execute Commands
-        run: |
-          ssh root@157.230.200.236 "cd server-helpup && yarn build && yarn start && p2m restart server"
+      - name: Deploy into Digital Ocean
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd server-helpup
+            git pull origin main
+            yarn build
+            yarn start
+            p2m restart server
