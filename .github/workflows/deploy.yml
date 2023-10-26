@@ -22,4 +22,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd server-helpup
-            ls
+            eval "$(ssh-agent -s)"
+            ssh-add <(echo "${{ secrets.SSH_GITHUB_PRIVATE_KEY }}")
+            git pull origin main
+            npm install -g yarn
+            yarn build
+            pm2 restart server
