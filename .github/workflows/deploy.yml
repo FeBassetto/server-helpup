@@ -14,16 +14,14 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v3
 
-      - name: Debug SSH Key
-        run: |
-          echo ${{ secrets.SSH_PRIVATE_KEY }}
-
       - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.7.0
+        uses: appleboy/ssh-action@master
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-
-      - name: SSH into Digital Ocean and Execute Commands
-        run: |
-          ssh root@157.230.200.236 "cd server-helpup && yarn build && yarn start && p2m restart server"
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd server-helpup
+            git pull origin main
+            yarn build
+            pm2 restart server
