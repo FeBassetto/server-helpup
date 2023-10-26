@@ -23,4 +23,8 @@ jobs:
           script: |
             cd server-helpup
             git pull
+            sudo apt install curl
+            curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+            source ~/.bashrc
+            nvm install 18.16.1
             nvm ls
