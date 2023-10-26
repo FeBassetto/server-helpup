@@ -1,10 +1,7 @@
 # Atualize o código do GitHub
-git pull
 
 # Execute o build do aplicativo
-curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
-source ~/.profile
-nvm ls-remote
+nvm ls
 nvm install 18.16.1
 nvm use 18.16.1
 
