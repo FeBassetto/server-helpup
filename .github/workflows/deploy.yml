@@ -16,9 +16,9 @@ jobs:
 
       - name: Deploy on digital ocean
         run: |
-          mkdir ~/.ssh
-          echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDBf9puh7CI6J92k4jC9HfbI0ExOoQWB1BkGHMrbROWtCvSThETfbkwfVSUHe4rXAjddB+OpIjgH3eDcxDW32Xs90qa6gSq59Dt6/hWcaxvOi+LEr51ELcFdgZBiwIpLmndnyM6j9GJKzOT1iNcaUbo/4XYird/L4ggOk5bqRs4Di5bzQ/9VZqSsVg06Xcn4qjtPL2q9V0QKQqEAcHmQYHL2glftXzIRYRiXYtu47P9HRx6Jd8MrU+rw4uNhiyKc8gpURWXHTzyzmwQb+SP+WfVf4jCkQj7LCDF3SyhKAPIIHJBUL7eia0B+r62infpsatcQ2p6fouW4BPsy3CLYWlV2mHdzJRCYBR4r2R1ZCepwR5iwz68CeHPW+9NN3YOzy4iLIFmzemR6pzhOGM4Gu0svhIrkb3uhzciH6WBn66XtX1JXIVskKNTVflP2MYKpQg+6N4fC5e7aMG85z3AzwHDeAzA5Nei3lHiSapn3m4D6m+n8U/rG88qbeOJxirU+AE= bassetto@bassettoPC' >> ~/.ssh/authorized_keys
-          ssh root@157.230.200.236
+          echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDBf9puh7CI6J92k4jC9HfbI0ExOoQWB1BkGHMrbROWtCvSThETfbkwfVSUHe4rXAjddB+OpIjgH3eDcxDW32Xs90qa6gSq59Dt6/hWcaxvOi+LEr51ELcFdgZBiwIpLmndnyM6j9GJKzOT1iNcaUbo/4XYird/L4ggOk5bqRs4Di5bzQ/9VZqSsVg06Xcn4qjtPL2q9V0QKQqEAcHmQYHL2glftXzIRYRiXYtu47P9HRx6Jd8MrU+rw4uNhiyKc8gpURWXHTzyzmwQb+SP+WfVf4jCkQj7LCDF3SyhKAPIIHJBUL7eia0B+r62infpsatcQ2p6fouW4BPsy3CLYWlV2mHdzJRCYBR4r2R1ZCepwR5iwz68CeHPW+9NN3YOzy4iLIFmzemR6pzhOGM4Gu0svhIrkb3uhzciH6WBn66XtX1JXIVskKNTVflP2MYKpQg+6N4fC5e7aMG85z3AzwHDeAzA5Nei3lHiSapn3m4D6m+n8U/rG88qbeOJxirU+AE= bassetto@bassettoPC' > ssh_key
+          chmod 600 ssh_key
+          ssh -i ssh_key root@157.230.200.236
           cd server-helpup
           git pull origin main
           yarn build
