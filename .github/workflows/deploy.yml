@@ -22,6 +22,4 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd server-helpup
-            git pull origin main
-            yarn build
-            p2m restart server
+            ls
