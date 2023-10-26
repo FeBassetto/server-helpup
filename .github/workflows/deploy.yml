@@ -14,7 +14,21 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v3
 
-      - name: Set up SSH
+      - name: Set up Node.js and Yarn
+        run: |
+          sudo apt update
+          curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+          sudo apt-get install -y nodejs
+          curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+          echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+          sudo apt update
+          sudo apt install -y yarn
+
+      - name: Install PM2
+        run: |
+          sudo npm install -g pm2
+
+      - name: Set up SSH and Deploy
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.SSH_HOST }}
