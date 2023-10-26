@@ -15,11 +15,13 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.7.0
+        uses: appleboy/ssh-action@v1.0.0
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-
-      - name: SSH into Digital Ocean and Execute Commands
-        run: |
-          ssh root@157.230.200.236 "cd server-helpup && git pull origin main && yarn build && p2m restart server"
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            cd server-helpup
+            git pull origin main
+            yarn build
+            p2m restart server
