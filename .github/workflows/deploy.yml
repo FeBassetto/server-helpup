@@ -14,10 +14,12 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v3
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.7.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Create SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private.key
+          sudo chmod 400 private.key
 
       - name: SSH into Digital Ocean and Execute Commands
         run: |
