@@ -23,8 +23,10 @@ jobs:
           script: |
             cd server-helpup
             git pull
-            sudo apt install curl
-            curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
-            source ~/.bashrc
-            nvm install 18.16.1
-            nvm ls
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+            npm i yarn pm2 -g
+            yarn build
+            pm2 restart server
