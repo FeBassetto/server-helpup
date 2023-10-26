@@ -14,10 +14,12 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v3
 
-      - name: Deploy on digital ocean
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+
+      - name: SSH into Digital Ocean and Execute Commands
         run: |
-          echo '$SSH_PRIVATE_KEY' > ssh_key
-          chmod 600 ssh_key
-          ssh -i ssh_key root@157.230.200.236 "cd server-helpup && git pull origin main && yarn build && p2m restart server"
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh root@157.230.200.236 "cd server-helpup && git pull origin main && yarn build && p2m restart server"
