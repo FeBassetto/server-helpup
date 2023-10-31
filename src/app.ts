@@ -7,7 +7,7 @@ export const app = fastify()
 
 app.register(
   async (instance, opts, next) => {
-    instance.register(usersRoutes, { prefix: '/api' })
+    instance.register(usersRoutes)
 
     next()
   },
