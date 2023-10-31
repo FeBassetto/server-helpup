@@ -8,10 +8,6 @@ services:
       - 3333:3333
     volumes:
       - .:/usr/app
-    environment:
-      - DATABASE_URL=postgres://felipe:helpuppass@db_helpup:5432/helpup
-      - NODE_ENV=production
-      - PORT=3333
 
 volumes:
   pgdata:
