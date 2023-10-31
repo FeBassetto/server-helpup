@@ -1,21 +1,6 @@
 version: '3.9'
 
 services:
-  api-helpup-pg:
-    image: bitnami/postgresql
-    ports:
-      - 5432:5432
-    environment:
-      - POSTGRESQL_USERNAME=felipe
-      - POSTGRESQL_PASSWORD=helpuppass
-      - POSTGRESQL_DATABASE=helpup
-    container_name: db_helpup
-    volumes:
-      - pgdata:/data/postgres
-    networks:
-      - helpup_network
-    hostname: db_helpup
-
   app:
     build: .
     container_name: app_apisolid
@@ -23,17 +8,11 @@ services:
       - 3333:3333
     volumes:
       - .:/usr/app
-    networks:
-      - helpup_network
     environment:
       - DATABASE_URL=postgres://felipe:helpuppass@db_helpup:5432/helpup
-      - NODE_ENV=dev
+      - NODE_ENV=production
       - PORT=3333
 
 volumes:
   pgdata:
     driver: local
-
-networks:
-  helpup_network:
-    driver: bridge
