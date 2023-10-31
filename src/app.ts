@@ -5,7 +5,14 @@ import { usersRoutes } from './http/controllers/users/routes'
 
 export const app = fastify()
 
-app.register(usersRoutes)
+app.register(
+  async (instance, opts, next) => {
+    instance.register(usersRoutes, { prefix: '/api' })
+
+    next()
+  },
+  { prefix: '/api' },
+)
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
