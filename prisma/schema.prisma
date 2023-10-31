@@ -9,7 +9,21 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id            String   @id @default(uuid())
+  name          String
+  nick          String   @unique
+  description   String
+  profile_url   String   @default("no_image.png")
+  email         String   @unique
+  password_hash String
+  city          String
+  longitude     String
+  latitude      String
+  cep           Int
+  is_admin      Boolean
+  is_confirmed  Boolean
+  created_at    DateTime @default(now())
+  is_deleted    Boolean
+
+  @@map("users")
 }

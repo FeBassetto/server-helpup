@@ -2,12 +2,14 @@ import fastify from 'fastify'
 import { ZodError } from 'zod'
 import { env } from './env'
 import { usersRoutes } from './http/controllers/users/routes'
+import { pingRoutes } from './http/controllers/ping/routes'
 
 export const app = fastify()
 
 app.register(
   async (instance, opts, next) => {
     instance.register(usersRoutes)
+    instance.register(pingRoutes)
 
     next()
   },
