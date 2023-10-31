@@ -7,6 +7,6 @@ export async function usersRoutes(app: FastifyInstance) {
 
     // console.log(teste)
 
-    return reply.status(201).send('Hello World!')
+    return reply.status(201).send('Hello World! 2')
   })
 }
