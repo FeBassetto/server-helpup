@@ -1,20 +1,20 @@
 version: '3.9'
 
 services:
-  api-solid-pg:
+  api-helpup-pg:
     image: bitnami/postgresql
     ports:
       - 5432:5432
     environment:
-      - POSTGRESQL_USERNAME=docker
-      - POSTGRESQL_PASSWORD=dockerpass
-      - POSTGRESQL_DATABASE=apisolid
-    container_name: db_apisolid
+      - POSTGRESQL_USERNAME=felipe
+      - POSTGRESQL_PASSWORD=helpuppass
+      - POSTGRESQL_DATABASE=helpup
+    container_name: db_helpup
     volumes:
       - pgdata:/data/postgres
     networks:
-      - apisolid_network
-    hostname: db_solidapi
+      - helpup_network
+    hostname: db_helpup
 
   app:
     build: .
@@ -24,15 +24,16 @@ services:
     volumes:
       - .:/usr/app
     networks:
-      - apisolid_network
+      - helpup_network
     environment:
-      - DATABASE_URL=postgres://docker:dockerpass@db_solidapi:5432/apisolid
+      - DATABASE_URL=postgres://felipe:helpuppass@db_helpup:5432/helpup
       - NODE_ENV=dev
+      - PORT=3333
 
 volumes:
   pgdata:
     driver: local
 
 networks:
-  apisolid_network:
+  helpup_network:
     driver: bridge
