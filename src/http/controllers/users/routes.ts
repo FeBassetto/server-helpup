@@ -1,3 +1,4 @@
+import { env } from '@/env'
 import { prisma } from '@/lib/prisma'
 import { FastifyInstance } from 'fastify'
 
@@ -7,6 +8,6 @@ export async function usersRoutes(app: FastifyInstance) {
 
     // console.log(teste)
 
-    return reply.status(201).send('Hello World! teste')
+    return reply.status(201).send('Hello World!' + env.TEST)
   })
 }
