@@ -12,14 +12,8 @@ services:
     container_name: db_helpup
     volumes:
       - pgdata:/data/postgres
-    networks:
-      - helpup_network
     hostname: db_helpup
 
 volumes:
   pgdata:
     driver: local
-
-networks:
-  helpup_network:
-    driver: bridge
