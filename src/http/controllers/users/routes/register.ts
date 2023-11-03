@@ -1,4 +1,5 @@
 import { makeRegisterUseCase } from '@/use-cases/users/factories/make-register-use-case'
+import { makeSendConfirmationUseCase } from '@/use-cases/users/factories/make-send-confirmation-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
@@ -38,7 +39,23 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
 
   const registerUseCase = makeRegisterUseCase()
 
-  const response = await registerUseCase.execute(data)
+  const user = await registerUseCase.execute(data)
 
-  return reply.status(201).send(response)
+  const token = await reply.jwtSign(
+    {
+      isAdmin: user.is_admin,
+      isConfirmed: user.is_confirmed,
+    },
+    {
+      sign: {
+        sub: user.id,
+      },
+    },
+  )
+
+  const sendConfitmationUseCase = makeSendConfirmationUseCase()
+
+  await sendConfitmationUseCase.execute({ email: user.email, token })
+
+  return reply.status(201).send({ token })
 }

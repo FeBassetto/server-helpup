@@ -17,12 +17,12 @@ export class PrismaUsersRepository implements UsersRepository {
     return user
   }
 
-  async findUserByEmailAndNick({
+  async findUserByEmailOrNick({
     email,
     nick,
   }: FindByEmailAndNickPayload): Promise<User | null> {
     const user = await prisma.user.findFirst({
-      where: { OR: [{ email, nick }] },
+      where: { OR: [{ email }, { nick }] },
     })
 
     return user

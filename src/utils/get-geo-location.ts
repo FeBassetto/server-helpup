@@ -1,4 +1,4 @@
-import { AppError } from '@/use-cases/users/errors/AppError'
+import { AppError } from '@/shared/errors/AppError'
 import axios from 'axios'
 
 interface GetGeoLocationProps {

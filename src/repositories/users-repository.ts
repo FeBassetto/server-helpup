@@ -8,5 +8,5 @@ export interface FindByEmailAndNickPayload {
 export interface UsersRepository {
   create(data: Prisma.UserCreateInput): Promise<User>
   findUserByEmail(email: string): Promise<User | null>
-  findUserByEmailAndNick(data: FindByEmailAndNickPayload): Promise<User | null>
+  findUserByEmailOrNick(data: FindByEmailAndNickPayload): Promise<User | null>
 }
