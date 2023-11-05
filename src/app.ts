@@ -40,7 +40,9 @@ app.setErrorHandler((error, _, reply) => {
   }
 
   if (error instanceof AppError) {
-    return reply.status(error.code).send({ messageError: error.message })
+    return reply
+      .status(error.code)
+      .send({ error: true, message: error.message, type: error.type })
   }
 
   if (env.NODE_ENV !== 'production') {

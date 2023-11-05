@@ -1,21 +1,15 @@
-import { makeAuthenticateUseCase } from '@/use-cases/users/factories/make-authenticate-use-case'
+import { makeConfirmEmailUseCase } from '@/use-cases/users/factories/make-confirm-user-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { z } from 'zod'
 
-export async function authenticate(
+export async function confirmEmail(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const authenticateBodySchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(6),
-  })
+  const userId = request.user.sub
 
-  const { email, password } = authenticateBodySchema.parse(request.body)
+  const confirmEmailUseCase = makeConfirmEmailUseCase()
 
-  const authenticateUseCase = makeAuthenticateUseCase()
-
-  const user = await authenticateUseCase.execute({ email, password })
+  const user = await confirmEmailUseCase.execute(userId)
 
   const token = await reply.jwtSign(
     {

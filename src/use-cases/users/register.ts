@@ -2,6 +2,7 @@ import { UsersRepository } from '@/repositories/users-repository'
 import { getGeoLocation } from '@/utils/get-geo-location'
 import { hash } from 'bcryptjs'
 import { AppError } from '../../shared/errors/AppError'
+import { usersErrorsConstants } from './errors/constants'
 
 interface RegisterUseCaseRequest {
   cep: string
@@ -47,16 +48,10 @@ export class RegisterUseCase {
 
     if (userAlreadyExists) {
       if (userAlreadyExists.email === email) {
-        throw new AppError({
-          code: 400,
-          message: 'Já existe um usuário cadastrado com este email',
-        })
+        throw new AppError(usersErrorsConstants.ACCOUNT_EMAIL_ALREADY_EXISTS)
       }
 
-      throw new AppError({
-        code: 400,
-        message: 'Já existe um usuário cadastrado com este nick',
-      })
+      throw new AppError(usersErrorsConstants.ACCOUNT_NICK_ALREADY_EXISTS)
     }
 
     const newUser = await this.usersRepository.create({

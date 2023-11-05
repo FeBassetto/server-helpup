@@ -1,4 +1,5 @@
 import { AppError } from '@/shared/errors/AppError'
+import { usersErrorsConstants } from '@/use-cases/users/errors/constants'
 import axios from 'axios'
 
 interface GetGeoLocationProps {
@@ -24,7 +25,7 @@ export async function getGeoLocation({
   const { data } = await axios.get(geoUrl)
 
   if (data.length === 0) {
-    throw new AppError({ code: 400, message: 'Endereço inválido' })
+    throw new AppError(usersErrorsConstants.INVALID_ADDRESS)
   }
 
   const { lat, lon } = data[0]

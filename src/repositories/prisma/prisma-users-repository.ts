@@ -17,12 +17,27 @@ export class PrismaUsersRepository implements UsersRepository {
     return user
   }
 
+  async findUserById(id: string): Promise<User | null> {
+    const user = await prisma.user.findUnique({ where: { id } })
+
+    return user
+  }
+
   async findUserByEmailOrNick({
     email,
     nick,
   }: FindByEmailAndNickPayload): Promise<User | null> {
     const user = await prisma.user.findFirst({
       where: { OR: [{ email }, { nick }] },
+    })
+
+    return user
+  }
+
+  async confirmUserEmail(id: string): Promise<User> {
+    const user = await prisma.user.update({
+      where: { id },
+      data: { is_confirmed: true },
     })
 
     return user

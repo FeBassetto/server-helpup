@@ -4,6 +4,7 @@ import fs from 'fs'
 import handlebars from 'handlebars'
 import { AppError } from '@/shared/errors/AppError'
 import { env } from '@/env'
+import { usersErrorsConstants } from '@/use-cases/users/errors/constants'
 
 export class SendinBlueProvider implements MailProvider {
   private client!: Transporter
@@ -23,10 +24,7 @@ export class SendinBlueProvider implements MailProvider {
     } catch (error) {
       console.error(error)
 
-      throw new AppError({
-        code: 400,
-        message: 'Não foi possível enviar um email para o usuário',
-      })
+      throw new AppError(usersErrorsConstants.SEND_EMAIL_FAILED)
     }
   }
 
