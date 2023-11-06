@@ -43,6 +43,17 @@ export const usersErrorsConstants = {
     message:
       'O endereço fornecido é inválido. Por favor, verifique e tente novamente.',
   },
+  MANY_ATTEMPTS: {
+    type: 'MANY_ATTEMPTS',
+    code: 429,
+    message: 'Muitas tentativas. Tente novamente mais tarde.',
+  },
+  ACCOUNT_ALREADY_IS_CONFIRMED: {
+    type: 'ACCOUNT_ALREADY_IS_CONFIRMED',
+    code: 409,
+    message:
+      'Esta conta já foi confirmada. Não é necessário confirmar novamente.',
+  },
 } as const
 
 export type UserErrorKeys = keyof typeof usersErrorsConstants

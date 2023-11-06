@@ -57,5 +57,5 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
 
   await sendConfitmationUseCase.execute({ email: user.email, token })
 
-  return reply.status(201).send({ token })
+  return reply.status(201).send()
 }

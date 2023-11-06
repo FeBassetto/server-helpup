@@ -18,6 +18,14 @@ export class AuthenticateUseCase {
       throw new AppError(usersErrorsConstants.INVALID_CREDENTIALS)
     }
 
+    if (user.is_deleted) {
+      throw new AppError(usersErrorsConstants.DELETED_USER)
+    }
+
+    if (!user.is_confirmed) {
+      throw new AppError(usersErrorsConstants.UNCONFIRMED_EMAIL)
+    }
+
     const doesPasswordMatch = await compare(password, user.password_hash)
 
     if (!doesPasswordMatch) {

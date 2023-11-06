@@ -25,7 +25,7 @@ app.register(fastifyCookie)
 app.register(
   async (instance, opts, next) => {
     instance.register(pingRoutes)
-    instance.register(usersRoutes)
+    instance.register(usersRoutes, { prefix: '/users' })
 
     next()
   },

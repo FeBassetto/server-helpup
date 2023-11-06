@@ -17,6 +17,10 @@ export class ConfirmEmailUseCase {
       throw new AppError(usersErrorsConstants.DELETED_USER)
     }
 
+    if (user.is_confirmed) {
+      throw new AppError(usersErrorsConstants.ACCOUNT_ALREADY_IS_CONFIRMED)
+    }
+
     const confirmedUser = await this.userRepository.confirmUserEmail(id)
 
     return confirmedUser
