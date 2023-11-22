@@ -18,8 +18,21 @@ jobs:
           node-version: 18.15.0
           cache: 'yarn'
 
-      - run: yarn install --frozen-lockfile
+      - name: Create .env file
+        run: |
+          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
+          echo "PORT=${{ secrets.PORT }}" >> .env
+          echo "BASE_URL=${{ secrets.BASE_URL }}" >> .env
+          echo "LOGO_URL=${{ secrets.LOGO_URL }}" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "CONFIRM_MAIL_URL=${{ secrets.CONFIRM_MAIL_URL }}" >> .env
+          echo "MAIL_HOST=${{ secrets.MAIL_HOST }}" >> .env
+          echo "MAIL_PORT=${{ secrets.MAIL_PORT }}" >> .env
+          echo "MAIL_USER=${{ secrets.MAIL_USER }}" >> .env
+          echo "MAIL_PASS=${{ secrets.MAIL_PASS }}" >> .env
 
+      - run: yarn install --frozen-lockfile
       - run: yarn run test
 
   build-and-deploy:
