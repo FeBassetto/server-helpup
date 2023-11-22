@@ -17,3 +17,7 @@ jobs:
 
       - run: yarn install --frozen-lockfile
       - run: yarn run test
+        env:
+          BASE_URL: https://helpup.online
+          CONFIRM_MAIL_URL: confirm-email
+          LOGO_URL: https://s3-helpup.s3.sa-east-1.amazonaws.com/common/logo-help-up.png
