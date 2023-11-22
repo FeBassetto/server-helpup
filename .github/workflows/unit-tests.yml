@@ -18,6 +18,14 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn run test
         env:
+          NODE_ENV: test
+          PORT: 3333
           BASE_URL: https://helpup.online
-          CONFIRM_MAIL_URL: confirm-email
           LOGO_URL: https://s3-helpup.s3.sa-east-1.amazonaws.com/common/logo-help-up.png
+          DATABASE_URL: 'o'
+          JWT_SECRET: 'o'
+          CONFIRM_MAIL_URL: confirm-email
+          MAIL_HOST: 'o'
+          MAIL_PORT: 1
+          MAIL_USER: 'o'
+          MAIL_PASS: 'o'

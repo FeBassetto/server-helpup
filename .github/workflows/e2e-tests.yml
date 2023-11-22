@@ -31,3 +31,12 @@ jobs:
         env:
           JWT_SECRET: testing
           DATABASE_URL: 'postgresql://docker:docker@localhost:5432/apisolid?schema=public'
+          NODE_ENV: test
+          PORT: 3333
+          BASE_URL: https://helpup.online
+          LOGO_URL: https://s3-helpup.s3.sa-east-1.amazonaws.com/common/logo-help-up.png
+          CONFIRM_MAIL_URL: confirm-email
+          MAIL_HOST: ${{secrets.MAIL_HOST}}
+          MAIL_PORT: ${{secrets.MAIL_PORT}}
+          MAIL_USER: ${{secrets.MAIL_USER}}
+          MAIL_PASS: ${{secrets.MAIL_PASS}}
