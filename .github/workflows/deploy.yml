@@ -1,4 +1,4 @@
-name: Deploy to AWS EC2
+name: Test and Deploy
 
 on:
   push:
@@ -6,8 +6,25 @@ on:
       - main
 
 jobs:
+  run-unit-tests:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.15.0
+          cache: 'yarn'
+
+      - run: yarn install --frozen-lockfile
+
+      - run: yarn run test
+
   build-and-deploy:
     runs-on: ubuntu-latest
+    needs: run-unit-tests
 
     steps:
       - name: Checkout repository
@@ -20,7 +37,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd var/www/server-helpup
+            cd /var/www/server-helpup
             git pull origin main
             yarn build
             docker-compose down

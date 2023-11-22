@@ -34,13 +34,6 @@ export class RegisterUseCase {
   }: RegisterUseCaseRequest) {
     const password_hash = await hash(password, 6)
 
-    const { lat, lon } = await getGeoLocation({
-      city,
-      neighborhood,
-      number,
-      street,
-    })
-
     const userAlreadyExists = await this.usersRepository.findUserByEmailOrNick({
       email,
       nick,
@@ -53,6 +46,13 @@ export class RegisterUseCase {
 
       throw new AppError(usersErrorsConstants.ACCOUNT_NICK_ALREADY_EXISTS)
     }
+
+    const { lat, lon } = await getGeoLocation({
+      city,
+      neighborhood,
+      number,
+      street,
+    })
 
     const newUser = await this.usersRepository.create({
       cep,

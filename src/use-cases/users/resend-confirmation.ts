@@ -26,7 +26,7 @@ export class ResendConfirmationUseCase {
         userId: user.id,
       })
 
-    if (lastThirtyMinutesConfirmationCodes.length === 3) {
+    if (lastThirtyMinutesConfirmationCodes.length === 2) {
       throw new AppError(usersErrorsConstants.MANY_ATTEMPTS)
     }
 
