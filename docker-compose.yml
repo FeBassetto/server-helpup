@@ -3,7 +3,7 @@ version: '3.9'
 services:
   app:
     build: .
-    container_name: app_apisolid
+    container_name: helpup_server
     ports:
       - 3333:3333
     volumes:
