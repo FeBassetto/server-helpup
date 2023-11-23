@@ -83,7 +83,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd var/www/server-helpup
-            git reset --hard HEAD
+            git checkout .
             git pull origin main
             yarn install
             yarn build
