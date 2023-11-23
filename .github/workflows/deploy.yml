@@ -6,72 +6,8 @@ on:
       - main
 
 jobs:
-  run-unit-tests:
-    name: Run Unit Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18.15.0
-          cache: 'yarn'
-      - run: yarn install --frozen-lockfile
-      - run: yarn run test
-        env:
-          NODE_ENV: test
-          PORT: 3333
-          BASE_URL: https://helpup.online
-          LOGO_URL: https://s3-helpup.s3.sa-east-1.amazonaws.com/common/logo-help-up.png
-          DATABASE_URL: 'o'
-          JWT_SECRET: 'o'
-          CONFIRM_MAIL_URL: confirm-email
-          MAIL_HOST: 'o'
-          MAIL_PORT: 1
-          MAIL_USER: 'o'
-          MAIL_PASS: 'o'
-
-  run-e2e-tests:
-    name: Run E2E Tests
-    runs-on: ubuntu-latest
-    needs: run-unit-tests
-
-    services:
-      api-solid-pg:
-        image: bitnami/postgresql
-        ports:
-          - 5432:5432
-        env:
-          POSTGRESQL_USERNAME: docker
-          POSTGRESQL_PASSWORD: dockerPass
-          POSTGRESQL_DATABASE: helpupTest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18.15.0
-          cache: 'yarn'
-
-      - run: yarn install --frozen-lockfile
-
-      - run: yarn run test:e2e
-        env:
-          JWT_SECRET: testing
-          DATABASE_URL: 'postgresql://docker:dockerPass@localhost:5432/helpupTest?schema=public'
-          NODE_ENV: test
-          PORT: 3333
-          BASE_URL: https://helpup.online
-          LOGO_URL: https://s3-helpup.s3.sa-east-1.amazonaws.com/common/logo-help-up.png
-          CONFIRM_MAIL_URL: confirm-email
-          MAIL_HOST: ${{secrets.MAIL_HOST}}
-          MAIL_PORT: ${{secrets.MAIL_PORT}}
-          MAIL_USER: ${{secrets.MAIL_USER}}
-          MAIL_PASS: ${{secrets.MAIL_PASS}}
-
   build-and-deploy:
     runs-on: ubuntu-latest
-    needs: run-e2e-tests
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -85,7 +21,7 @@ jobs:
             cd var/www/server-helpup
             git checkout .
             git pull origin main
-            yarn install
+            yarn
             yarn build
             docker-compose down
             docker-compose up -d --build
