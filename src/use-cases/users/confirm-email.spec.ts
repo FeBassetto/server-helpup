@@ -1,9 +1,11 @@
-import { UsersRepository } from '@/repositories/users-repository'
-import { ConfirmEmailUseCase } from './confirm-email'
-import { beforeEach, describe, expect, it } from 'vitest'
-import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { hash } from 'bcryptjs'
+import { beforeEach, describe, expect, it } from 'vitest'
+
+import { ConfirmEmailUseCase } from './confirm-email'
 import { usersErrorsConstants } from './errors/constants'
+
+import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
+import { UsersRepository } from '@/repositories/users-repository'
 
 let usersRepository: UsersRepository
 let sut: ConfirmEmailUseCase

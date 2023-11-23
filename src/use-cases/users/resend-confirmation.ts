@@ -1,6 +1,7 @@
+import { usersErrorsConstants } from './errors/constants'
+
 import { UsersRepository } from '@/repositories/users-repository'
 import { AppError } from '@/shared/errors/AppError'
-import { usersErrorsConstants } from './errors/constants'
 
 export class ResendConfirmationUseCase {
   constructor(private usersRepository: UsersRepository) {}

@@ -1,6 +1,8 @@
-import { env } from '@/env'
-import { MailProvider } from '@/shared/providers/MailProvider/mail-provider'
 import { resolve } from 'path'
+
+import { env } from '@/env'
+
+import { MailProvider } from '@/shared/providers/MailProvider/mail-provider'
 
 interface SendConfirmationUseCaseRequest {
   email: string

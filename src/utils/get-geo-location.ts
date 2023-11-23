@@ -1,6 +1,7 @@
+import axios from 'axios'
+
 import { AppError } from '@/shared/errors/AppError'
 import { usersErrorsConstants } from '@/use-cases/users/errors/constants'
-import axios from 'axios'
 
 interface GetGeoLocationProps {
   street: string

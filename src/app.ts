@@ -1,10 +1,12 @@
 import fastify from 'fastify'
 import { ZodError } from 'zod'
-import { env } from './env'
-import { usersRoutes } from './http/controllers/users/routes'
-import { pingRoutes } from './http/controllers/ping/routes'
-import fastifyJwt from '@fastify/jwt'
+
 import fastifyCookie from '@fastify/cookie'
+import fastifyJwt from '@fastify/jwt'
+
+import { env } from './env'
+import { pingRoutes } from './http/controllers/ping/routes'
+import { usersRoutes } from './http/controllers/users/routes'
 import { AppError } from './shared/errors/AppError'
 
 export const app = fastify()

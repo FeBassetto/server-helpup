@@ -1,9 +1,13 @@
-import { MailProvider } from '../mail-provider'
-import nodemailer, { Transporter } from 'nodemailer'
 import fs from 'fs'
+
 import handlebars from 'handlebars'
-import { AppError } from '@/shared/errors/AppError'
+import nodemailer, { Transporter } from 'nodemailer'
+
 import { env } from '@/env'
+
+import { MailProvider } from '../mail-provider'
+
+import { AppError } from '@/shared/errors/AppError'
 import { usersErrorsConstants } from '@/use-cases/users/errors/constants'
 
 export class SendinBlueProvider implements MailProvider {
@@ -34,6 +38,8 @@ export class SendinBlueProvider implements MailProvider {
     variables: object,
     path: string,
   ): Promise<void> {
+    if (env.NODE_ENV === 'test') return
+
     const templateFileContent = fs.readFileSync(path).toString('utf-8')
 
     const templateParse = handlebars.compile(templateFileContent)

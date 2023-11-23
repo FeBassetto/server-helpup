@@ -1,6 +1,7 @@
+import { FastifyReply, FastifyRequest } from 'fastify'
+
 import { AppError } from '@/shared/errors/AppError'
 import { usersErrorsConstants } from '@/use-cases/users/errors/constants'
-import { FastifyReply, FastifyRequest } from 'fastify'
 
 export async function verifyValidUser(
   request: FastifyRequest,

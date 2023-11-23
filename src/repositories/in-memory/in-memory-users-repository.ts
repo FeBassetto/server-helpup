@@ -1,13 +1,16 @@
+import { randomUUID } from 'crypto'
+
 import { ConfirmationCode, Prisma, User } from '@prisma/client'
+
 import {
   FindByEmailAndNickPayload,
   GetConfirmationCodeByMinutesPayload,
   UsersRepository,
 } from '../users-repository'
-import { randomUUID } from 'crypto'
+
 import { AppError } from '@/shared/errors/AppError'
-import { usersErrorsConstants } from '@/use-cases/users/errors/constants'
 import { DayjsDateProvider } from '@/shared/providers/DateProvider/implementations/dayjs-date-provider'
+import { usersErrorsConstants } from '@/use-cases/users/errors/constants'
 
 export class InMemoryUsersRepository implements UsersRepository {
   public users: User[] = []

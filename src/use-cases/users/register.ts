@@ -1,8 +1,11 @@
+import { hash } from 'bcryptjs'
+
+import { AppError } from '../../shared/errors/AppError'
+
+import { usersErrorsConstants } from './errors/constants'
+
 import { UsersRepository } from '@/repositories/users-repository'
 import { getGeoLocation } from '@/utils/get-geo-location'
-import { hash } from 'bcryptjs'
-import { AppError } from '../../shared/errors/AppError'
-import { usersErrorsConstants } from './errors/constants'
 
 interface RegisterUseCaseRequest {
   cep: string

@@ -2,6 +2,38 @@
   "extends": ["@rocketseat/eslint-config/node", "plugin:prettier/recommended"],
   "rules": {
     "camelcase": "off",
-    "no-useless-constructor": "off"
-  }
+    "no-useless-constructor": "off",
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "*",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "@/*",
+            "group": "internal",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["builtin"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ]
+  },
+  "plugins": ["import"]
 }

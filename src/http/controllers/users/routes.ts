@@ -1,9 +1,11 @@
 import { FastifyInstance } from 'fastify'
+
 import { authenticate } from './routes/authenticate'
-import { register } from './routes/register'
 import { confirmEmail } from './routes/confirm-email'
-import { verifyJWT } from '@/http/middlewares/verify-jwt'
+import { register } from './routes/register'
 import { resendConfirmation } from './routes/resend-confirmation'
+
+import { verifyJWT } from '@/http/middlewares/verify-jwt'
 
 export async function usersRoutes(app: FastifyInstance) {
   app.post('/', register)

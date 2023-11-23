@@ -1,6 +1,7 @@
-import { makeAuthenticateUseCase } from '@/use-cases/users/factories/make-authenticate-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
+
+import { makeAuthenticateUseCase } from '@/use-cases/users/factories/make-authenticate-use-case'
 
 export async function authenticate(
   request: FastifyRequest,

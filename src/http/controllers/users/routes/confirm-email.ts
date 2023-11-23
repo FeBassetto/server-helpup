@@ -1,5 +1,6 @@
-import { makeConfirmEmailUseCase } from '@/use-cases/users/factories/make-confirm-user-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
+
+import { makeConfirmEmailUseCase } from '@/use-cases/users/factories/make-confirm-user-use-case'
 
 export async function confirmEmail(
   request: FastifyRequest,

@@ -1,9 +1,11 @@
-import { UsersRepository } from '@/repositories/users-repository'
-import { beforeEach, describe, expect, it } from 'vitest'
-import { AuthenticateUseCase } from './authenticate'
-import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { hash } from 'bcryptjs'
+import { beforeEach, describe, expect, it } from 'vitest'
+
+import { AuthenticateUseCase } from './authenticate'
 import { usersErrorsConstants } from './errors/constants'
+
+import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
+import { UsersRepository } from '@/repositories/users-repository'
 
 let usersRepository: UsersRepository
 let sut: AuthenticateUseCase

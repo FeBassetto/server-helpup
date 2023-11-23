@@ -1,7 +1,8 @@
-import { makeResendConfirmationUseCase } from '@/use-cases/users/factories/make-resend-confirmation-use-case'
-import { makeSendConfirmationUseCase } from '@/use-cases/users/factories/make-send-confirmation-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
+
+import { makeResendConfirmationUseCase } from '@/use-cases/users/factories/make-resend-confirmation-use-case'
+import { makeSendConfirmationUseCase } from '@/use-cases/users/factories/make-send-confirmation-use-case'
 
 export async function resendConfirmation(
   request: FastifyRequest,

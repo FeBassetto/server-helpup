@@ -1,7 +1,8 @@
-import { makeRegisterUseCase } from '@/use-cases/users/factories/make-register-use-case'
-import { makeSendConfirmationUseCase } from '@/use-cases/users/factories/make-send-confirmation-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
+
+import { makeRegisterUseCase } from '@/use-cases/users/factories/make-register-use-case'
+import { makeSendConfirmationUseCase } from '@/use-cases/users/factories/make-send-confirmation-use-case'
 
 export async function register(request: FastifyRequest, reply: FastifyReply) {
   const passwordRegex = /^(?=.*[A-Z])(?=.*\d)/

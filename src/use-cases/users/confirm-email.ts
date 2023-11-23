@@ -1,7 +1,9 @@
+import { User } from '@prisma/client'
+
+import { usersErrorsConstants } from './errors/constants'
+
 import { UsersRepository } from '@/repositories/users-repository'
 import { AppError } from '@/shared/errors/AppError'
-import { User } from '@prisma/client'
-import { usersErrorsConstants } from './errors/constants'
 
 export class ConfirmEmailUseCase {
   constructor(private userRepository: UsersRepository) {}

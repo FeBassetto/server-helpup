@@ -9,7 +9,7 @@ import { UsersRepository } from '@/repositories/users-repository'
 
 let usersRepository: UsersRepository
 
-describe('Authenticate (e2e)', () => {
+describe('Resend Confirmation (e2e)', () => {
   beforeAll(async () => {
     await app.ready()
   })
@@ -22,7 +22,7 @@ describe('Authenticate (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to authenticate', async () => {
+  it('should be able to resend confirmation', async () => {
     const email = 'felipebtu9@gmail.com'
     const password = 'senha123'
 
@@ -32,7 +32,7 @@ describe('Authenticate (e2e)', () => {
       city: 'São Paulo',
       description: 'Uma breve descrição sobre o usuário.',
       is_admin: false,
-      is_confirmed: true,
+      is_confirmed: false,
       is_deleted: false,
       latitude: '-23.550520',
       longitude: '-46.633308',
@@ -41,13 +41,10 @@ describe('Authenticate (e2e)', () => {
       password_hash: await hash(password, 6),
     })
 
-    const { body } = await request(app.server)
-      .post('/api/users/sessions')
-      .send({
-        email,
-        password,
-      })
+    const { statusCode } = await request(app.server)
+      .post('/api/users/resend-confirmation')
+      .send({ email })
 
-    expect(body.token).toEqual(expect.any(String))
+    expect(statusCode).toEqual(201)
   })
 })
