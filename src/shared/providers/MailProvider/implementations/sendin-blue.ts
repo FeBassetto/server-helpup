@@ -1,6 +1,3 @@
-import fs from 'fs'
-
-import handlebars from 'handlebars'
 import nodemailer, { Transporter } from 'nodemailer'
 
 import { env } from '@/env'
@@ -32,25 +29,14 @@ export class SendinBlueProvider implements MailProvider {
     }
   }
 
-  async sendMail(
-    to: string,
-    subject: string,
-    variables: object,
-    path: string,
-  ): Promise<void> {
+  async sendMail(to: string, subject: string, html: string): Promise<void> {
     if (env.NODE_ENV === 'test') return
-
-    const templateFileContent = fs.readFileSync(path).toString('utf-8')
-
-    const templateParse = handlebars.compile(templateFileContent)
-
-    const templateHTML = templateParse(variables)
 
     await this.client.sendMail({
       to,
       from: 'HelpUp <noreplay@helpup.com.br>',
       subject,
-      html: templateHTML,
+      html,
     })
   }
 }
