@@ -84,6 +84,7 @@ jobs:
           script: |
             cd var/www/server-helpup
             git pull origin main
+            yarn install
             yarn build
             docker-compose down
             docker-compose up -d --build
