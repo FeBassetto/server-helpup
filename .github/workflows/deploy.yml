@@ -33,6 +33,7 @@ jobs:
   run-e2e-tests:
     name: Run E2E Tests
     runs-on: ubuntu-latest
+    needs: run-unit-tests
 
     services:
       api-solid-pg:
@@ -81,7 +82,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd /var/www/server-helpup
+            cd var/www/server-helpup
             git pull origin main
             yarn build
             docker-compose down
