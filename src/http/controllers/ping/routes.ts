@@ -18,6 +18,6 @@ export async function pingRoutes(app: FastifyInstance) {
   })
 
   app.patch('/ping', async (request, reply) => {
-    return reply.status(201).send({ status: 'ok', host: 'AWS-SP-test' })
+    return reply.status(201).send({ status: 'ok', host: 'AWS-SP' })
   })
 }
