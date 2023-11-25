@@ -78,4 +78,23 @@ export class PrismaUsersRepository implements UsersRepository {
 
     return confirmationCode
   }
+
+  async getUserDataById(id: string): Promise<User | null> {
+    const user = await prisma.user.findUnique({
+      where: { id },
+    })
+
+    return user
+  }
+
+  async deleteUserDataById(id: string): Promise<void> {
+    await prisma.user.delete({ where: { id } })
+  }
+
+  async deleteUserStatusById(id: string): Promise<void> {
+    await prisma.user.update({
+      where: { id },
+      data: { is_deleted: true },
+    })
+  }
 }

@@ -106,4 +106,22 @@ export class InMemoryUsersRepository implements UsersRepository {
       (code) => code.user_id === userId && code.created_at >= dateLimit,
     )
   }
+
+  async getUserDataById(id: string): Promise<User | null> {
+    return this.users.find((user) => user.id === id) || null
+  }
+
+  async deleteUserStatusById(id: string): Promise<void> {
+    const userIndex = this.users.findIndex((user) => user.id === id)
+    if (userIndex >= 0) {
+      this.users[userIndex].is_deleted = true
+    }
+  }
+
+  async deleteUserDataById(id: string): Promise<void> {
+    const userIndex = this.users.findIndex((user) => user.id === id)
+    if (userIndex >= 0) {
+      this.users.splice(userIndex, 1)
+    }
+  }
 }
