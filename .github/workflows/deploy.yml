@@ -11,6 +11,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
       - name: Login to Amazon EC2
         uses: appleboy/ssh-action@master
         with:
@@ -21,5 +22,5 @@ jobs:
             cd var/www/server-helpup
             git checkout .
             git pull origin main
-            docker-compose down
-            docker-compose up -d
+            npx prisma migrate deploy
+            docker-compose up -d --build
