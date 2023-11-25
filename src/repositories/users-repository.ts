@@ -20,4 +20,7 @@ export interface UsersRepository {
   getConfirmationCodeByMinutes(
     data: GetConfirmationCodeByMinutesPayload,
   ): Promise<ConfirmationCode[]>
+  getUserDataById(id: string): Promise<User | null>
+  deleteUserDataById(id: string): Promise<void>
+  deleteUserStatusById(id: string): Promise<void>
 }
