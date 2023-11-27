@@ -67,6 +67,7 @@ export class RegisterUseCase {
       name,
       nick,
       password_hash,
+      is_admin: false,
     })
 
     return newUser

@@ -9,6 +9,7 @@ const envSchema = z.object({
   JWT_SECRET: z.string(),
   BASE_URL: z.string(),
   CONFIRM_MAIL_URL: z.string(),
+  DELETE_MAIL_URL: z.string(),
   LOGO_URL: z.string(),
   MAIL_HOST: z.string(),
   MAIL_PORT: z.coerce.number(),

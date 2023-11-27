@@ -54,11 +54,20 @@ export const usersErrorsConstants = {
     message:
       'Esta conta já foi confirmada. Não é necessário confirmar novamente.',
   },
+  ACCOUNT_ALREADY_IS_DELETED: {
+    type: 'ACCOUNT_ALREADY_IS_DELETED',
+    code: 409,
+    message: 'Esta conta já foi deletada.',
+  },
+  ADMIN_NOT_ALLOWED_ACTION: {
+    type: 'ADMIN_NOT_ALLOWED_ACTION',
+    code: 403,
+    message: 'Ação não permitida para o administrador.',
+  },
 } as const
 
 export type UserErrorKeys = keyof typeof usersErrorsConstants
 
 export type ErrorInfo = (typeof usersErrorsConstants)[UserErrorKeys]
 
-// Se você precisar de um tipo que inclua o campo 'type', você pode criar um novo tipo:
 export type ErrorType = (typeof usersErrorsConstants)[UserErrorKeys]['type']
