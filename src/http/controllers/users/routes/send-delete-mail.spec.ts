@@ -37,7 +37,7 @@ describe('Send delete mail (e2e)', () => {
       latitude: '-23.550520',
       longitude: '-46.633308',
       name: 'João da Silva',
-      nick: 'joaosilva',
+      nick: 'joaosilvateste',
       password_hash: await hash(password, 6),
     })
 
