@@ -23,7 +23,6 @@ jobs:
             git checkout .
             git pull origin main
             npx prisma migrate deploy
-            docker-compose up -d --build
-            docker image prune -a --filter "until=10m" --force
-            docker container prune -f
-            docker volume prune -f
+            docker build -t helpup_server .
+            docker run -d -p 3333:3333 helpup_server
+            docker system prune -a
