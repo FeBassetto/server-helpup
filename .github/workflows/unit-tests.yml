@@ -32,3 +32,4 @@ jobs:
           MAIL_PORT: 1
           MAIL_USER: 'o'
           MAIL_PASS: 'o'
+          DELETE_MAIL_URL: '0'
