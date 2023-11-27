@@ -24,5 +24,7 @@ jobs:
             git pull origin main
             npx prisma migrate deploy
             docker build -t helpup_server .
-            docker run -d -p 3333:3333 helpup_server
-            docker system prune -a
+            docker stop helpup_server_container || true
+            docker rm helpup_server_container || true
+            docker run -d -p 3333:3333 --name helpup_server_container helpup_server
+            docker system prune -a -f
