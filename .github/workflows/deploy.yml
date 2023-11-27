@@ -25,3 +25,5 @@ jobs:
             npx prisma migrate deploy
             docker-compose up -d --build
             docker image prune -a --filter "until=10m" --force
+            docker container prune -f
+            docker volume prune -f
