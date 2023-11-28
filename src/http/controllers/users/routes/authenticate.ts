@@ -22,6 +22,7 @@ export async function authenticate(
     {
       isAdmin: user.is_admin,
       isConfirmed: user.is_confirmed,
+      isDeleted: user.is_deleted,
     },
     {
       sign: {
@@ -34,6 +35,7 @@ export async function authenticate(
     {
       isAdmin: user.is_admin,
       isConfirmed: user.is_confirmed,
+      isDeleted: user.is_deleted,
     },
     {
       sign: {

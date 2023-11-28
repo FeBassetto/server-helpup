@@ -25,7 +25,9 @@ model User {
   created_at    DateTime @default(now())
   is_deleted    Boolean  @default(false)
 
-  ConfirmationCode ConfirmationCode[]
+  ConfirmationCode     ConfirmationCode[]
+  FriendshipsInitiated Friendship[]       @relation("User1Friendships")
+  FriendshipsReceived  Friendship[]       @relation("User2Friendships")
 
   @@map("users")
 }
@@ -38,4 +40,19 @@ model ConfirmationCode {
   user_id String
 
   @@map("confirmation_codes")
+}
+
+model Friendship {
+  id String @id @default(uuid())
+
+  userId1    String
+  userId2    String
+  isAccepted Boolean?
+
+  created_at DateTime @default(now())
+
+  user1 User @relation("User1Friendships", fields: [userId1], references: [id])
+  user2 User @relation("User2Friendships", fields: [userId2], references: [id])
+
+  @@map("friendships")
 }

@@ -23,6 +23,7 @@ export async function sendDeleteMail(
     {
       isAdmin: user.isAdmin,
       isConfirmed: user.isConfirmed,
+      isDeleteMail: true,
     },
     {
       sign: {

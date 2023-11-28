@@ -67,8 +67,10 @@ describe('Profile (e2e)', () => {
       'created_at',
     ]
 
+    console.log(profileBody)
+
     expectedProperties.forEach((property) => {
-      expect(profileBody.user).toHaveProperty(property)
+      expect(profileBody.user.data).toHaveProperty(property)
     })
   })
 })

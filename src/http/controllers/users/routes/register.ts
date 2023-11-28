@@ -46,6 +46,7 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
     {
       isAdmin: user.is_admin,
       isConfirmed: user.is_confirmed,
+      isConfirmMail: true,
     },
     {
       sign: {

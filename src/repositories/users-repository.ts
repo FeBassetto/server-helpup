@@ -1,4 +1,4 @@
-import { ConfirmationCode, Prisma, User } from '@prisma/client'
+import { ConfirmationCode, Friendship, Prisma, User } from '@prisma/client'
 
 export interface FindByEmailAndNickPayload {
   email: string
@@ -8,6 +8,11 @@ export interface FindByEmailAndNickPayload {
 export interface GetConfirmationCodeByMinutesPayload {
   userId: string
   minutes: number
+}
+
+export interface FrendshipPayload {
+  userId1: string
+  userId2: string
 }
 
 export interface UsersRepository {
@@ -23,4 +28,16 @@ export interface UsersRepository {
   getUserDataById(id: string): Promise<User | null>
   deleteUserDataById(id: string): Promise<void>
   deleteUserStatusById(id: string): Promise<void>
+
+  createFriendship(data: FrendshipPayload): Promise<void>
+  getFriendshipByUsersId(data: FrendshipPayload): Promise<Friendship | null>
+  getFriendShipById(friendshipId: string): Promise<Friendship | null>
+  getAllUserFriendships(userId: string): Promise<Friendship[]>
+  getFriendshipInvitates(userId: string): Promise<Friendship[]>
+  getSendFriendshipInvitates(userId: string): Promise<Friendship[]>
+  updateFriendshipById(
+    data: Prisma.FriendshipUpdateInput,
+    friendShipId: string,
+  ): Promise<void>
+  deleteFriendshipById(friendshipId: string): Promise<void>
 }

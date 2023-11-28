@@ -49,6 +49,7 @@ describe('Confirm Email (e2e)', () => {
       {
         isAdmin: user.is_admin,
         isConfirmed: user.is_confirmed,
+        isConfirmMail: true,
       },
       secret,
       {

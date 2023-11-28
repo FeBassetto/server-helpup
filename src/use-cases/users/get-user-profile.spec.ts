@@ -35,11 +35,11 @@ describe('Get data Use Case', () => {
 
     const userSut = await sut.execute(user.id)
 
-    expect(userSut.id).toEqual(expect.any(String))
+    expect(userSut?.data.id).toEqual(expect.any(String))
   })
 
   it('should not be able to get non-existing user data', async () => {
-    await expect(sut.execute('testId')).rejects.toThrow(
+    await expect(sut.execute('testid')).rejects.toThrow(
       usersErrorsConstants.ACCOUNT_NOT_FOUND.message,
     )
   })

@@ -1,8 +1,10 @@
 import { hash } from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 import request from 'supertest'
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 import { app } from '@/app'
+import { env } from '@/env'
 
 import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository'
 import { UsersRepository } from '@/repositories/users-repository'
@@ -26,7 +28,7 @@ describe('Delete Account (e2e)', () => {
     const email = 'felipebtu9@gmail.com'
     const password = 'senha123'
 
-    await usersRepository.create({
+    const user = await usersRepository.create({
       email,
       cep: '12345678',
       city: 'São Paulo',
@@ -41,16 +43,25 @@ describe('Delete Account (e2e)', () => {
       password_hash: await hash(password, 6),
     })
 
-    const { body } = await request(app.server)
-      .post('/api/users/sessions')
-      .send({
-        email,
-        password,
-      })
+    const secret = env.JWT_SECRET
+
+    const token = jwt.sign(
+      {
+        isAdmin: user.is_admin,
+        isConfirmed: user.is_confirmed,
+        isDeleted: user.is_deleted,
+        isDeleteMail: true,
+      },
+      secret,
+      {
+        subject: user.id.toString(),
+        expiresIn: '1h',
+      },
+    )
 
     const { statusCode: deleteStatusCode } = await request(app.server)
       .delete('/api/users')
-      .set('Authorization', `Bearer ${body.token}`)
+      .set('Authorization', `Bearer ${token}`)
       .send({ deleteData: true })
 
     expect(deleteStatusCode).toEqual(200)
@@ -69,7 +80,7 @@ describe('Delete Account (e2e)', () => {
     const email = 'deleteStatus@gmail.com'
     const password = 'senha123'
 
-    await usersRepository.create({
+    const user = await usersRepository.create({
       email,
       cep: '12345678',
       city: 'São Paulo',
@@ -84,16 +95,25 @@ describe('Delete Account (e2e)', () => {
       password_hash: await hash(password, 6),
     })
 
-    const { body } = await request(app.server)
-      .post('/api/users/sessions')
-      .send({
-        email,
-        password,
-      })
+    const secret = env.JWT_SECRET
+
+    const token = jwt.sign(
+      {
+        isAdmin: user.is_admin,
+        isConfirmed: user.is_confirmed,
+        isDeleted: user.is_deleted,
+        isDeleteMail: true,
+      },
+      secret,
+      {
+        subject: user.id.toString(),
+        expiresIn: '1h',
+      },
+    )
 
     const { statusCode: deleteStatusCode } = await request(app.server)
       .delete('/api/users')
-      .set('Authorization', `Bearer ${body.token}`)
+      .set('Authorization', `Bearer ${token}`)
       .send({ deleteData: false })
 
     expect(deleteStatusCode).toEqual(200)
@@ -112,7 +132,7 @@ describe('Delete Account (e2e)', () => {
     const email = 'felipebtu9teste@gmail.com'
     const password = 'senha123'
 
-    await usersRepository.create({
+    const user = await usersRepository.create({
       email,
       cep: '12345678',
       city: 'São Paulo',
@@ -127,16 +147,25 @@ describe('Delete Account (e2e)', () => {
       password_hash: await hash(password, 6),
     })
 
-    const { body } = await request(app.server)
-      .post('/api/users/sessions')
-      .send({
-        email,
-        password,
-      })
+    const secret = env.JWT_SECRET
+
+    const token = jwt.sign(
+      {
+        isAdmin: user.is_admin,
+        isConfirmed: user.is_confirmed,
+        isDeleted: user.is_deleted,
+        isDeleteMail: true,
+      },
+      secret,
+      {
+        subject: user.id.toString(),
+        expiresIn: '1h',
+      },
+    )
 
     const { statusCode: deleteStatusCode } = await request(app.server)
       .delete('/api/users')
-      .set('Authorization', `Bearer ${body.token}`)
+      .set('Authorization', `Bearer ${token}`)
       .send({ deleteData: false })
 
     expect(deleteStatusCode).toEqual(403)
@@ -155,7 +184,7 @@ describe('Delete Account (e2e)', () => {
     const email = 'felipebtu9@gmail.com'
     const password = 'senha123'
 
-    await usersRepository.create({
+    const user = await usersRepository.create({
       email,
       cep: '12345678',
       city: 'São Paulo',
@@ -170,16 +199,25 @@ describe('Delete Account (e2e)', () => {
       password_hash: await hash(password, 6),
     })
 
-    const { body } = await request(app.server)
-      .post('/api/users/sessions')
-      .send({
-        email,
-        password,
-      })
+    const secret = env.JWT_SECRET
+
+    const token = jwt.sign(
+      {
+        isAdmin: user.is_admin,
+        isConfirmed: user.is_confirmed,
+        isDeleted: user.is_deleted,
+        isDeleteMail: true,
+      },
+      secret,
+      {
+        subject: user.id.toString(),
+        expiresIn: '1h',
+      },
+    )
 
     const { statusCode: deleteStatusCode } = await request(app.server)
       .delete('/api/users')
-      .set('Authorization', `Bearer ${body.token}`)
+      .set('Authorization', `Bearer ${token}`)
       .send({ deleteData: false })
 
     expect(deleteStatusCode).toEqual(200)
@@ -198,7 +236,7 @@ describe('Delete Account (e2e)', () => {
     const email = 'teste@gmail.com'
     const password = 'senha123'
 
-    await usersRepository.create({
+    const user = await usersRepository.create({
       email,
       cep: '12345678',
       city: 'São Paulo',
@@ -213,19 +251,28 @@ describe('Delete Account (e2e)', () => {
       password_hash: await hash(password, 6),
     })
 
-    const { body } = await request(app.server)
-      .post('/api/users/sessions')
-      .send({
-        email,
-        password,
-      })
+    const secret = env.JWT_SECRET
+
+    const token = jwt.sign(
+      {
+        isAdmin: user.is_admin,
+        isConfirmed: user.is_confirmed,
+        isDeleted: user.is_deleted,
+        isDeleteMail: true,
+      },
+      secret,
+      {
+        subject: user.id.toString(),
+        expiresIn: '1h',
+      },
+    )
 
     const { statusCode: deleteStatusCode } = await request(app.server)
       .delete('/api/users')
-      .set('Authorization', `Bearer ${body.token}`)
+      .set('Authorization', `Bearer ${token}`)
       .send({ deleteData: false })
 
-    expect(deleteStatusCode).toEqual(401)
+    expect(deleteStatusCode).toEqual(403)
 
     const { statusCode } = await request(app.server)
       .post('/api/users/sessions')

@@ -22,6 +22,7 @@ export async function resendConfirmation(
     {
       isAdmin: user.is_admin,
       isConfirmed: user.is_confirmed,
+      isConfirmMail: true,
     },
     {
       sign: {

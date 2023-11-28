@@ -16,6 +16,7 @@ export async function confirmEmail(
     {
       isAdmin: user.is_admin,
       isConfirmed: user.is_confirmed,
+      isDeleted: user.is_deleted,
     },
     {
       sign: {

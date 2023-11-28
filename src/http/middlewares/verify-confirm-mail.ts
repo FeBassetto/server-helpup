@@ -3,7 +3,7 @@ import { FastifyRequest } from 'fastify'
 import { AppError } from '@/shared/errors/AppError'
 import { usersErrorsConstants } from '@/use-cases/users/errors/constants'
 
-export async function verifyValidUser(request: FastifyRequest) {
+export async function verifyConfirmMail(request: FastifyRequest) {
   try {
     await request.jwtVerify()
   } catch (error) {
@@ -11,11 +11,7 @@ export async function verifyValidUser(request: FastifyRequest) {
     throw new AppError(usersErrorsConstants.UNAUTHORIZED)
   }
 
-  if (!request.user.isConfirmed) {
-    throw new AppError(usersErrorsConstants.UNCONFIRMED_EMAIL)
-  }
-
-  if (request.user.isDeleted) {
-    throw new AppError(usersErrorsConstants.DELETED_USER)
+  if (!request.user.isConfirmMail) {
+    throw new AppError(usersErrorsConstants.UNAUTHORIZED)
   }
 }
