@@ -6,6 +6,7 @@ import fastifyJwt from '@fastify/jwt'
 import fastifyWebsocket from '@fastify/websocket'
 
 import { env } from './env'
+import { friendshipsRoutes } from './http/controllers/friendships/routes'
 import { pingRoutes } from './http/controllers/ping/routes'
 import { usersRoutes } from './http/controllers/users/routes'
 import { AppError } from './shared/errors/AppError'
@@ -31,6 +32,7 @@ app.register(
   async (instance, opts, next) => {
     instance.register(pingRoutes)
     instance.register(usersRoutes, { prefix: '/users' })
+    instance.register(friendshipsRoutes, { prefix: '/friendships' })
 
     next()
   },

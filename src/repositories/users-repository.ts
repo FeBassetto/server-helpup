@@ -10,6 +10,13 @@ export interface GetConfirmationCodeByMinutesPayload {
   minutes: number
 }
 
+export interface getFriendSuggestionsPayload {
+  latitude: number
+  longitude: number
+  offset: number
+  ignoreIdList: Array<string>
+}
+
 export interface UsersRepository {
   create(data: Prisma.UserCreateInput): Promise<User>
   findUserByEmail(email: string): Promise<User | null>
@@ -20,6 +27,7 @@ export interface UsersRepository {
   getConfirmationCodeByMinutes(
     data: GetConfirmationCodeByMinutesPayload,
   ): Promise<ConfirmationCode[]>
+  getFriendSuggestions(data: getFriendSuggestionsPayload): Promise<User[]>
   getUserDataById(id: string): Promise<User | null>
   deleteUserDataById(id: string): Promise<void>
   deleteUserStatusById(id: string): Promise<void>

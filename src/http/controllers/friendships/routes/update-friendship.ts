@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-import { makeUpdateFriendshipUseCase } from '@/use-cases/users/factories/make-update-friendship-use-case'
+import { makeUpdateFriendshipUseCase } from '@/use-cases/friendships/factories/make-update-friendship-use-case'
 
 export async function updateFriendship(
   request: FastifyRequest,

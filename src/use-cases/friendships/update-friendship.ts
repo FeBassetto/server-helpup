@@ -28,15 +28,11 @@ export class UpdateFriendshipUseCase {
       existsFriendShip?.userId1 !== userId &&
       existsFriendShip?.userId2 !== userId
     ) {
-      throw new AppError(
-        friendshipErrorsConstants.ACTION_NOT_ALLOWED_FRIENDSHIP,
-      )
+      throw new AppError(friendshipErrorsConstants.ACTION_NOT_ALLOWED)
     }
 
     if (existsFriendShip?.userId2 !== userId) {
-      throw new AppError(
-        friendshipErrorsConstants.ACTION_NOT_ALLOWED_FRIENDSHIP,
-      )
+      throw new AppError(friendshipErrorsConstants.ACTION_NOT_ALLOWED)
     }
 
     if (existsFriendShip.isAccepted !== null) {

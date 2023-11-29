@@ -33,8 +33,8 @@ export const friendshipErrorsConstants = {
     message:
       'O status do pedido de amizade já foi atualizado anteriormente. Não é possível atualizá-lo novamente.',
   },
-  ACTION_NOT_ALLOWED_FRIENDSHIP: {
-    type: 'ACTION_NOT_ALLOWED_FRIENDSHIP',
+  ACTION_NOT_ALLOWED: {
+    type: 'ACTION_NOT_ALLOWED',
     code: 403,
     message:
       'Você não tem permissão para executar esta ação. Verifique suas permissões ou entre em contato com o suporte.',

@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-import { makeUndoFriendshipUseCase } from '@/use-cases/users/factories/make-undo-friendship-use-case'
+import { makeUndoFriendshipUseCase } from '@/use-cases/friendships/factories/make-undo-friendship-use-case'
 
 export async function undoFriendship(
   request: FastifyRequest,

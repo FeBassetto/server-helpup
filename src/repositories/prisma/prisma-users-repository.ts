@@ -4,6 +4,7 @@ import {
   FindByEmailAndNickPayload,
   GetConfirmationCodeByMinutesPayload,
   UsersRepository,
+  getFriendSuggestionsPayload,
 } from '../users-repository'
 
 import { prisma } from '@/lib/prisma'
@@ -69,6 +70,38 @@ export class PrismaUsersRepository implements UsersRepository {
     })
 
     return confirmationCode
+  }
+
+  async getFriendSuggestions({
+    latitude,
+    longitude,
+    offset,
+    ignoreIdList,
+  }: getFriendSuggestionsPayload): Promise<User[]> {
+    const limit = 10
+
+    console.log(latitude, longitude, offset, ignoreIdList)
+
+    const suggestions = await prisma.$queryRaw<User[]>`
+      SELECT * FROM "users"
+      WHERE "id" NOT IN (${Prisma.join(ignoreIdList)})
+      AND (
+      6371 * acos(
+        cos(radians(${latitude})) * cos(radians("latitude")) * cos(radians("longitude") - radians(${longitude})) +
+        sin(radians(${latitude})) * sin(radians("latitude"))
+      )
+    ) <= 100 
+      ORDER BY (
+        6371 * acos(
+          cos(radians(${latitude})) * cos(radians("latitude")) * cos(radians("longitude") - radians(${longitude})) +
+          sin(radians(${latitude})) * sin(radians("latitude"))
+        )
+      ) ASC
+      OFFSET ${offset}
+      LIMIT ${limit}
+    `
+
+    return suggestions
   }
 
   async getUserDataById(id: string): Promise<User | null> {

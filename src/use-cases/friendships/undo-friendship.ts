@@ -23,27 +23,21 @@ export class UndoFriendshipUseCase {
       existsFriendShip?.userId1 !== userId &&
       existsFriendShip?.userId2 !== userId
     ) {
-      throw new AppError(
-        friendshipErrorsConstants.ACTION_NOT_ALLOWED_FRIENDSHIP,
-      )
+      throw new AppError(friendshipErrorsConstants.ACTION_NOT_ALLOWED)
     }
 
     if (
       existsFriendShip.userId2 === userId &&
       existsFriendShip.isAccepted !== true
     ) {
-      throw new AppError(
-        friendshipErrorsConstants.ACTION_NOT_ALLOWED_FRIENDSHIP,
-      )
+      throw new AppError(friendshipErrorsConstants.ACTION_NOT_ALLOWED)
     }
 
     if (
       existsFriendShip.userId1 === userId &&
       existsFriendShip.isAccepted === false
     ) {
-      throw new AppError(
-        friendshipErrorsConstants.ACTION_NOT_ALLOWED_FRIENDSHIP,
-      )
+      throw new AppError(friendshipErrorsConstants.ACTION_NOT_ALLOWED)
     }
 
     await this.friendshipsRepository.deleteFriendshipById(friendshipId)

@@ -26,7 +26,7 @@ describe('Get data Use Case', () => {
       is_admin: false,
       is_confirmed: false,
       is_deleted: true,
-      latitude: '-23.550520',
+      latitude: '-23.55052',
       longitude: '-46.633308',
       name: 'João da Silva',
       nick: 'joaosilva',

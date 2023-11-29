@@ -49,6 +49,14 @@ export class PrismaFriendshipRepository implements FriendshipsRepository {
     })
   }
 
+  async getAllUserFriendshipsRequest(userId: string): Promise<Friendship[]> {
+    return await prisma.friendship.findMany({
+      where: {
+        OR: [{ userId1: userId }, { userId2: userId }],
+      },
+    })
+  }
+
   async getFriendshipInvitates(userId: string): Promise<Friendship[]> {
     return await prisma.friendship.findMany({
       where: { userId2: userId, isAccepted: null },

@@ -10,6 +10,7 @@ export interface FriendshipsRepository {
   getFriendshipByUsersId(data: FrendshipPayload): Promise<Friendship | null>
   getFriendShipById(friendshipId: string): Promise<Friendship | null>
   getAllUserFriendships(userId: string): Promise<Friendship[]>
+  getAllUserFriendshipsRequest(userId: string): Promise<Friendship[]>
   getFriendshipInvitates(userId: string): Promise<Friendship[]>
   getSendFriendshipInvitates(userId: string): Promise<Friendship[]>
   updateFriendshipById(

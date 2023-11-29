@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { usersErrorsConstants } from './errors/constants'
 
 import { UsersRepository } from '@/repositories/users-repository'
@@ -29,6 +30,18 @@ export class GetOtherUserProfileUseCase {
       throw new AppError(usersErrorsConstants.ACCOUNT_NOT_FOUND)
     }
 
-    return user
+    const {
+      is_deleted,
+      is_admin,
+      is_confirmed,
+      password_hash,
+      email,
+      longitude,
+      latitude,
+      cep,
+      ...userWithoutSensitiveData
+    } = user
+
+    return userWithoutSensitiveData
   }
 }

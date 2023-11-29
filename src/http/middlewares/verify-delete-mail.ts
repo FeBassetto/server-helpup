@@ -4,6 +4,10 @@ import { AppError } from '@/shared/errors/AppError'
 import { usersErrorsConstants } from '@/use-cases/users/errors/constants'
 
 export async function verifyDeleteMail(request: FastifyRequest) {
+  if (!request.headers.authorization) {
+    throw new AppError(usersErrorsConstants.UNAUTHORIZED)
+  }
+
   try {
     await request.jwtVerify()
   } catch (error) {

@@ -49,6 +49,12 @@ export class InMemoryFriendshipRepository implements FriendshipsRepository {
     )
   }
 
+  async getAllUserFriendshipsRequest(userId: string): Promise<Friendship[]> {
+    return this.friendships.filter(
+      (f) => f.userId1 === userId || f.userId2 === userId,
+    )
+  }
+
   async getFriendshipInvitates(userId: string): Promise<Friendship[]> {
     return this.friendships.filter(
       (f) => f.userId2 === userId && f.isAccepted === null,

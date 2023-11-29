@@ -17,8 +17,8 @@ model User {
   email         String   @unique
   password_hash String
   city          String
-  longitude     String
-  latitude      String
+  longitude     Decimal
+  latitude      Decimal
   cep           String
   is_admin      Boolean  @default(false)
   is_confirmed  Boolean  @default(false)
