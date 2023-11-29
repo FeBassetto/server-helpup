@@ -1,4 +1,4 @@
-import { SendFriendshipUseCase } from '../send-friendship'
+import { SendFriendshipUseCase } from '../../friendships/send-friendship'
 
 import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository'
 

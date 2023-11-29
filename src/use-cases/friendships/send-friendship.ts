@@ -1,5 +1,8 @@
-import { usersErrorsConstants } from './errors/constants'
+import { usersErrorsConstants } from '../users/errors/constants'
 
+import { friendshipErrorsConstants } from './errors/constants'
+
+import { FriendshipsRepository } from '@/repositories/friendships-repository'
 import { UsersRepository } from '@/repositories/users-repository'
 import { AppError } from '@/shared/errors/AppError'
 
@@ -9,7 +12,10 @@ export interface SendFriendshipUseCaseRequest {
 }
 
 export class SendFriendshipUseCase {
-  constructor(private usersRepository: UsersRepository) {}
+  constructor(
+    private usersRepository: UsersRepository,
+    private friendshipsRepository: FriendshipsRepository,
+  ) {}
 
   async execute({ userId1, userId2 }: SendFriendshipUseCaseRequest) {
     const [user1, user2] = await Promise.all([
@@ -22,36 +28,37 @@ export class SendFriendshipUseCase {
     }
 
     if (!user2 || !user2.is_confirmed || user2.is_deleted || user2.is_admin) {
-      throw new AppError(usersErrorsConstants.FRIENDSHIP_NOT_ALLOWED)
+      throw new AppError(friendshipErrorsConstants.FRIENDSHIP_NOT_ALLOWED)
     }
 
-    const existsFriendship = await this.usersRepository.getFriendshipByUsersId({
-      userId1,
-      userId2,
-    })
+    const existsFriendship =
+      await this.friendshipsRepository.getFriendshipByUsersId({
+        userId1,
+        userId2,
+      })
 
     if (existsFriendship?.isAccepted === true) {
-      throw new AppError(usersErrorsConstants.FRIENDSHIP_ALREADY_EXISTS)
+      throw new AppError(friendshipErrorsConstants.FRIENDSHIP_ALREADY_EXISTS)
     }
 
     if (
       existsFriendship?.isAccepted === false &&
       existsFriendship.userId1 === userId1
     ) {
-      throw new AppError(usersErrorsConstants.FRIENDSHIP_NOT_ACCEPT)
+      throw new AppError(friendshipErrorsConstants.FRIENDSHIP_NOT_ACCEPT)
     }
 
     if (existsFriendship?.isAccepted === null) {
-      throw new AppError(usersErrorsConstants.FRIENDSHIP_ALREADY_SENT)
+      throw new AppError(friendshipErrorsConstants.FRIENDSHIP_ALREADY_SENT)
     }
 
     if (
       existsFriendship?.isAccepted === false &&
       existsFriendship.userId2 === userId1
     ) {
-      await this.usersRepository.deleteFriendshipById(existsFriendship.id)
+      await this.friendshipsRepository.deleteFriendshipById(existsFriendship.id)
     }
 
-    await this.usersRepository.createFriendship({ userId1, userId2 })
+    await this.friendshipsRepository.createFriendship({ userId1, userId2 })
   }
 }

@@ -1,4 +1,4 @@
-import { UpdateFriendshipUseCase } from '../update-friendship'
+import { UpdateFriendshipUseCase } from '../../friendships/update-friendship'
 
 import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository'
 

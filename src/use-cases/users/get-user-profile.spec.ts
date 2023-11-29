@@ -35,7 +35,7 @@ describe('Get data Use Case', () => {
 
     const userSut = await sut.execute(user.id)
 
-    expect(userSut?.data.id).toEqual(expect.any(String))
+    expect(userSut.id).toEqual(expect.any(String))
   })
 
   it('should not be able to get non-existing user data', async () => {

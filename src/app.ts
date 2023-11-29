@@ -3,6 +3,7 @@ import { ZodError } from 'zod'
 
 import fastifyCookie from '@fastify/cookie'
 import fastifyJwt from '@fastify/jwt'
+import fastifyWebsocket from '@fastify/websocket'
 
 import { env } from './env'
 import { pingRoutes } from './http/controllers/ping/routes'
@@ -21,6 +22,8 @@ app.register(fastifyJwt, {
     expiresIn: '10m',
   },
 })
+
+app.register(fastifyWebsocket)
 
 app.register(fastifyCookie)
 

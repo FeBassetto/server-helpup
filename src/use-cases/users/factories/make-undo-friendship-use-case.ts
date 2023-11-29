@@ -1,4 +1,4 @@
-import { UndoFriendshipUseCase } from '../undo-friendship'
+import { UndoFriendshipUseCase } from '../../friendships/undo-friendship'
 
 import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository'
 

@@ -13,8 +13,6 @@ export class GetUserProfileUseCase {
       throw new AppError(usersErrorsConstants.ACCOUNT_NOT_FOUND)
     }
 
-    const friendShips = await this.usersRepository.getAllUserFriendships(id)
-
-    return { data: user, friendShips }
+    return user
   }
 }
