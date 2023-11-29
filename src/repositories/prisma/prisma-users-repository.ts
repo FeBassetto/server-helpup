@@ -5,6 +5,7 @@ import {
   GetConfirmationCodeByMinutesPayload,
   UsersRepository,
   getFriendSuggestionsPayload,
+  updateUserByIdPayload,
 } from '../users-repository'
 
 import { prisma } from '@/lib/prisma'
@@ -129,5 +130,9 @@ export class PrismaUsersRepository implements UsersRepository {
     })
 
     return user
+  }
+
+  async updateUserById({ data, userId }: updateUserByIdPayload): Promise<User> {
+    return await prisma.user.update({ where: { id: userId }, data })
   }
 }

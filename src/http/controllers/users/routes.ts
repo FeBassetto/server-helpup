@@ -9,6 +9,7 @@ import { refresh } from './routes/refresh'
 import { register } from './routes/register'
 import { resendConfirmation } from './routes/resend-confirmation'
 import { sendDeleteMail } from './routes/send-delete-mail'
+import { update } from './routes/update'
 
 import { verifyConfirmMail } from '@/http/middlewares/verify-confirm-mail'
 import { verifyDeleteMail } from '@/http/middlewares/verify-delete-mail'
@@ -25,6 +26,7 @@ export async function usersRoutes(app: FastifyInstance) {
   app.get('/profile/:userId', { onRequest: [verifyValidUser] }, otherProfile)
 
   app.patch('/token/refresh', refresh)
+  app.patch('/', { onRequest: verifyValidUser }, update)
 
   app.delete('/', { onRequest: [verifyDeleteMail] }, deleteRoute)
 

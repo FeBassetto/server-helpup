@@ -17,18 +17,29 @@ export interface getFriendSuggestionsPayload {
   ignoreIdList: Array<string>
 }
 
+export interface updateUserByIdPayload {
+  data: Prisma.UserUpdateInput
+  userId: string
+}
+
 export interface UsersRepository {
   create(data: Prisma.UserCreateInput): Promise<User>
+  createConfirmationCode(userId: string): Promise<ConfirmationCode>
+
+  confirmUserEmail(id: string): Promise<User>
+
   findUserByEmail(email: string): Promise<User | null>
   findUserById(id: string): Promise<User | null>
   findUserByEmailOrNick(data: FindByEmailAndNickPayload): Promise<User | null>
-  confirmUserEmail(id: string): Promise<User>
-  createConfirmationCode(userId: string): Promise<ConfirmationCode>
+
   getConfirmationCodeByMinutes(
     data: GetConfirmationCodeByMinutesPayload,
   ): Promise<ConfirmationCode[]>
   getFriendSuggestions(data: getFriendSuggestionsPayload): Promise<User[]>
   getUserDataById(id: string): Promise<User | null>
+
+  updateUserById(data: updateUserByIdPayload): Promise<User>
+
   deleteUserDataById(id: string): Promise<void>
   deleteUserStatusById(id: string): Promise<void>
 }

@@ -15,6 +15,11 @@ const envSchema = z.object({
   MAIL_PORT: z.coerce.number(),
   MAIL_USER: z.string(),
   MAIL_PASS: z.string(),
+  S3_ACCESS_KEY: z.string(),
+  S3_SECRET_ACCESS_KEY: z.string(),
+  S3_REGION: z.string(),
+  S3_NAME: z.string(),
+  S3_BASE_URL: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)

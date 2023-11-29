@@ -3,6 +3,7 @@ import { ZodError } from 'zod'
 
 import fastifyCookie from '@fastify/cookie'
 import fastifyJwt from '@fastify/jwt'
+import multipart from '@fastify/multipart'
 import fastifyWebsocket from '@fastify/websocket'
 
 import { env } from './env'
@@ -25,7 +26,7 @@ app.register(fastifyJwt, {
 })
 
 app.register(fastifyWebsocket)
-
+app.register(multipart, { attachFieldsToBody: true })
 app.register(fastifyCookie)
 
 app.register(
@@ -40,6 +41,10 @@ app.register(
 )
 
 app.setErrorHandler((error, _, reply) => {
+  if (env.NODE_ENV === 'dev') {
+    console.log(JSON.stringify(error))
+  }
+
   if (error instanceof ZodError) {
     return reply
       .status(400)

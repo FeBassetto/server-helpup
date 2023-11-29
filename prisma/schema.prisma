@@ -13,7 +13,7 @@ model User {
   name          String
   nick          String   @unique
   description   String
-  profile_url   String   @default("no_image.png")
+  profile_url   String   @default("users/default.jpg")
   email         String   @unique
   password_hash String
   city          String
