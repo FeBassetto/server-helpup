@@ -7,6 +7,7 @@ import {
   GetConfirmationCodeByMinutesPayload,
   UsersRepository,
   getFriendSuggestionsPayload,
+  updatePasswordPaylaod,
   updateUserByIdPayload,
 } from '../users-repository'
 
@@ -198,6 +199,32 @@ export class InMemoryUsersRepository implements UsersRepository {
         typeof data.description === 'string'
           ? data.description
           : currentUser.description
+    }
+
+    this.users[userIndex] = updatedUser
+
+    return updatedUser
+  }
+
+  async findUserByNick(nick: string): Promise<User | null> {
+    return this.users.find((user) => user.nick === nick) || null
+  }
+
+  async updatePassword({
+    password_hash,
+    userId,
+  }: updatePasswordPaylaod): Promise<User> {
+    const userIndex = this.users.findIndex((user) => user.id === userId)
+
+    if (userIndex === -1) {
+      throw new AppError(usersErrorsConstants.ACCOUNT_NOT_FOUND)
+    }
+
+    const currentUser = this.users[userIndex]
+    const updatedUser: User = {
+      ...currentUser,
+      id: currentUser.id as string,
+      password_hash,
     }
 
     this.users[userIndex] = updatedUser

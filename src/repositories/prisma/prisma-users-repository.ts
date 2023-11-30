@@ -5,6 +5,7 @@ import {
   GetConfirmationCodeByMinutesPayload,
   UsersRepository,
   getFriendSuggestionsPayload,
+  updatePasswordPaylaod,
   updateUserByIdPayload,
 } from '../users-repository'
 
@@ -134,5 +135,19 @@ export class PrismaUsersRepository implements UsersRepository {
 
   async updateUserById({ data, userId }: updateUserByIdPayload): Promise<User> {
     return await prisma.user.update({ where: { id: userId }, data })
+  }
+
+  async findUserByNick(nick: string): Promise<User | null> {
+    return await prisma.user.findUnique({ where: { nick } })
+  }
+
+  async updatePassword({
+    password_hash,
+    userId,
+  }: updatePasswordPaylaod): Promise<User> {
+    return await prisma.user.update({
+      where: { id: userId },
+      data: { password_hash },
+    })
   }
 }

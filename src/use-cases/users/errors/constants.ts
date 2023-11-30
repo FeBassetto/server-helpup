@@ -4,6 +4,22 @@ export const usersErrorsConstants = {
     code: 403,
     message: 'Por favor, confirme seu e-mail para acessar sua conta.',
   },
+  UPDATE_GEO_MISSED_PARAMS: {
+    type: 'UPDATE_GEO_MISSED_PARAMS',
+    code: 400,
+    message: 'Você deve fornecer todos os quatro parâmetros ou nenhum deles.',
+  },
+  PASSWORD_NOT_SAME: {
+    type: 'PASSWORD_NOT_SAME',
+    code: 400,
+    message:
+      'As senhas não coincidem. Certifique-se de fornecer a mesma senha nos campos de senha e confirmação de senha.',
+  },
+  SAME_PASSWORD: {
+    type: 'SAME_PASSWORD',
+    code: 400,
+    message: 'A nova senha não pode ser igual à senha atual.',
+  },
   SEND_EMAIL_FAILED: {
     type: 'SEND_EMAIL_FAILED',
     code: 500,
@@ -36,6 +52,12 @@ export const usersErrorsConstants = {
     code: 409,
     message:
       'O nick escolhido já está em uso. Por favor, escolha um diferente.',
+  },
+  SAME_NICK: {
+    type: 'SAME_NICK',
+    code: 400,
+    message:
+      'O novo nick escolhido é igual ao seu nick atual. Escolha um nick diferente.',
   },
   INVALID_ADDRESS: {
     type: 'INVALID_ADDRESS',

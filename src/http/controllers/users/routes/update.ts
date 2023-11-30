@@ -8,12 +8,12 @@ export async function update(request: FastifyRequest, reply: FastifyReply) {
 
   await request.saveRequestFiles()
 
+  console.log(request.body)
+
   const updateBodySchema = z.object({
     name: z.string().min(2).max(100).optional(),
     nick: z.string().min(3).max(30).optional(),
     description: z.string().max(200).optional(),
-    email: z.string().email().optional(),
-    password: z.string().min(6).optional(),
     cep: z
       .string()
       .regex(/^\d{8}$/)

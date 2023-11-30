@@ -22,6 +22,11 @@ export interface updateUserByIdPayload {
   userId: string
 }
 
+export interface updatePasswordPaylaod {
+  userId: string
+  password_hash: string
+}
+
 export interface UsersRepository {
   create(data: Prisma.UserCreateInput): Promise<User>
   createConfirmationCode(userId: string): Promise<ConfirmationCode>
@@ -30,6 +35,7 @@ export interface UsersRepository {
 
   findUserByEmail(email: string): Promise<User | null>
   findUserById(id: string): Promise<User | null>
+  findUserByNick(nick: string): Promise<User | null>
   findUserByEmailOrNick(data: FindByEmailAndNickPayload): Promise<User | null>
 
   getConfirmationCodeByMinutes(
@@ -39,6 +45,7 @@ export interface UsersRepository {
   getUserDataById(id: string): Promise<User | null>
 
   updateUserById(data: updateUserByIdPayload): Promise<User>
+  updatePassword(data: updatePasswordPaylaod): Promise<User>
 
   deleteUserDataById(id: string): Promise<void>
   deleteUserStatusById(id: string): Promise<void>

@@ -65,7 +65,7 @@ export class RegisterUseCase {
       latitude: lat,
       longitude: lon,
       name,
-      nick,
+      nick: nick.toLowerCase(),
       password_hash,
       is_admin: false,
     })
