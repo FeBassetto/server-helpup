@@ -28,6 +28,7 @@ model User {
   ConfirmationCode     ConfirmationCode[]
   FriendshipsInitiated Friendship[]       @relation("User1Friendships")
   FriendshipsReceived  Friendship[]       @relation("User2Friendships")
+  Notification         Notification[]
 
   @@map("users")
 }
@@ -57,8 +58,19 @@ model Friendship {
   @@map("friendships")
 }
 
+enum NotificationType {
+  friendship_invitation
+  friendship_accept
+}
+
 model Notification {
   id String @id @default(uuid())
 
-  
+  type NotificationType
+
+  read_at    DateTime?
+  created_at DateTime  @default(now())
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
 }

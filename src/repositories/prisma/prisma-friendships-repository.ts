@@ -11,8 +11,8 @@ export class PrismaFriendshipRepository implements FriendshipsRepository {
   async createFriendship({
     userId1,
     userId2,
-  }: FrendshipPayload): Promise<void> {
-    await prisma.friendship.create({
+  }: FrendshipPayload): Promise<Friendship> {
+    return await prisma.friendship.create({
       data: {
         userId1,
         userId2,

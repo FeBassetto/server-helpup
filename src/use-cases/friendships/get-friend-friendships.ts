@@ -19,7 +19,7 @@ export class GetFriendFriendshipsUseCase {
 
     let friendFriendShipList: Friendship[] = []
 
-    if (isFriends) {
+    if (isFriends?.isAccepted) {
       friendFriendShipList =
         await this.friendshipRepository.getAllUserFriendships(friendId)
     }

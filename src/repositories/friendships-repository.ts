@@ -6,7 +6,7 @@ export interface FrendshipPayload {
 }
 
 export interface FriendshipsRepository {
-  createFriendship(data: FrendshipPayload): Promise<void>
+  createFriendship(data: FrendshipPayload): Promise<Friendship>
   getFriendshipByUsersId(data: FrendshipPayload): Promise<Friendship | null>
   getFriendShipById(friendshipId: string): Promise<Friendship | null>
   getAllUserFriendships(userId: string): Promise<Friendship[]>

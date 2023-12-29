@@ -8,8 +8,6 @@ export async function update(request: FastifyRequest, reply: FastifyReply) {
 
   await request.saveRequestFiles()
 
-  console.log(request.body)
-
   const updateBodySchema = z.object({
     name: z.string().min(2).max(100).optional(),
     nick: z.string().min(3).max(30).optional(),

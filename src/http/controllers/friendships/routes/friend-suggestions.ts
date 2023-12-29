@@ -15,7 +15,6 @@ export async function friendSuggestions(
     }),
   })
 
-  console.log(sub, request.body)
   const { offset } = getFrienSuggestionsQuerySchema.parse(request.query)
 
   const getFriendSuggestionsUseCase = makeGetFriendSuggestionsUseCase()

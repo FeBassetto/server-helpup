@@ -18,6 +18,8 @@ interface RegisterUseCaseRequest {
   password: string
   street: string
   number: number
+  lat?: number
+  lon?: number
 }
 
 export class RegisterUseCase {
@@ -34,12 +36,17 @@ export class RegisterUseCase {
     password,
     street,
     number,
+    lat,
+    lon,
   }: RegisterUseCaseRequest) {
+    let latitude = lat || ''
+    let longitude = lon || ''
+
     const password_hash = await hash(password, 6)
 
     const userAlreadyExists = await this.usersRepository.findUserByEmailOrNick({
       email,
-      nick,
+      nick: nick.toLowerCase(),
     })
 
     if (userAlreadyExists) {
@@ -50,20 +57,25 @@ export class RegisterUseCase {
       throw new AppError(usersErrorsConstants.ACCOUNT_NICK_ALREADY_EXISTS)
     }
 
-    const { lat, lon } = await getGeoLocation({
-      city,
-      neighborhood,
-      number,
-      street,
-    })
+    if (!latitude && !longitude) {
+      const { lat: apiLatitude, lon: apiLongitude } = await getGeoLocation({
+        city,
+        neighborhood,
+        number,
+        street,
+      })
+
+      latitude = apiLatitude
+      longitude = apiLongitude
+    }
 
     const newUser = await this.usersRepository.create({
       cep,
       city,
       description,
       email,
-      latitude: lat,
-      longitude: lon,
+      latitude,
+      longitude,
       name,
       nick: nick.toLowerCase(),
       password_hash,

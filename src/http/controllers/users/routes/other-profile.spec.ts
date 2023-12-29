@@ -9,7 +9,7 @@ import { UsersRepository } from '@/repositories/users-repository'
 
 let usersRepository: UsersRepository
 
-describe('Profile (e2e)', () => {
+describe('Other Profile (e2e)', () => {
   beforeAll(async () => {
     await app.ready()
   })
@@ -22,8 +22,9 @@ describe('Profile (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to get profile', async () => {
+  it('should be able to get other profile', async () => {
     const email = 'felipebtu9@gmail.com'
+    const otherEmail = 'teste@gmail.com'
     const password = 'senha123'
 
     await usersRepository.create({
@@ -41,6 +42,21 @@ describe('Profile (e2e)', () => {
       password_hash: await hash(password, 6),
     })
 
+    const otherUser = await usersRepository.create({
+      email: otherEmail,
+      cep: '87654321',
+      city: 'Rio de Janeiro',
+      description: 'Outra breve descrição sobre o usuário.',
+      is_admin: false,
+      is_confirmed: true,
+      is_deleted: false,
+      latitude: '-22.9068',
+      longitude: '-43.1729',
+      name: 'Maria Oliveira',
+      nick: 'mariaoliveira',
+      password_hash: await hash(password, 6),
+    })
+
     const { body } = await request(app.server)
       .post('/api/users/sessions')
       .send({
@@ -48,27 +64,12 @@ describe('Profile (e2e)', () => {
         password,
       })
 
+    const token = body.token
+
     const { body: profileBody } = await request(app.server)
-      .get('/api/users')
-      .set('Authorization', `Bearer ${body.token}`)
-      .send()
+      .get(`/api/users/profile/${otherUser.id}`)
+      .set('Authorization', `Bearer ${token}`)
 
-    const expectedProperties = [
-      'id',
-      'name',
-      'nick',
-      'description',
-      'profile_url',
-      'email',
-      'city',
-      'longitude',
-      'latitude',
-      'cep',
-      'created_at',
-    ]
-
-    expectedProperties.forEach((property) => {
-      expect(profileBody.user.data).toHaveProperty(property)
-    })
+    expect(profileBody.user.data.city).toEqual(otherUser.city)
   })
 })

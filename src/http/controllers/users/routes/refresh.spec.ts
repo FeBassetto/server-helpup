@@ -9,7 +9,7 @@ import { UsersRepository } from '@/repositories/users-repository'
 
 let usersRepository: UsersRepository
 
-describe('Profile (e2e)', () => {
+describe('Refresh (e2e)', () => {
   beforeAll(async () => {
     await app.ready()
   })
@@ -22,7 +22,7 @@ describe('Profile (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to get profile', async () => {
+  it('should be able to refresh token', async () => {
     const email = 'felipebtu9@gmail.com'
     const password = 'senha123'
 
@@ -41,34 +41,23 @@ describe('Profile (e2e)', () => {
       password_hash: await hash(password, 6),
     })
 
-    const { body } = await request(app.server)
+    const loginResponse = await request(app.server)
       .post('/api/users/sessions')
-      .send({
-        email,
-        password,
-      })
+      .send({ email, password })
 
-    const { body: profileBody } = await request(app.server)
-      .get('/api/users')
-      .set('Authorization', `Bearer ${body.token}`)
-      .send()
+    const setCookieHeader = loginResponse.headers['set-cookie']
+    let refreshToken = ''
 
-    const expectedProperties = [
-      'id',
-      'name',
-      'nick',
-      'description',
-      'profile_url',
-      'email',
-      'city',
-      'longitude',
-      'latitude',
-      'cep',
-      'created_at',
-    ]
+    if (setCookieHeader && Array.isArray(setCookieHeader)) {
+      refreshToken = setCookieHeader.find((cookie) =>
+        cookie.startsWith('refreshToken'),
+      )
+    }
 
-    expectedProperties.forEach((property) => {
-      expect(profileBody.user.data).toHaveProperty(property)
-    })
+    const { body } = await request(app.server)
+      .patch('/api/users/token/refresh')
+      .set('Cookie', refreshToken)
+
+    expect(body.token).toEqual(expect.any(String))
   })
 })

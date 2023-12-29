@@ -32,16 +32,20 @@ export async function usersRoutes(app: FastifyInstance) {
 
   app.delete('/', { onRequest: [verifyDeleteMail] }, deleteRoute)
 
-  // app.get('/hello-ws/test/test', { websocket: true }, (connection, req) => {
-  //   console.log('WebSocket client connected.')
+  // app.get(
+  //   '/hello-ws/test/test',
+  //   { websocket: true },
+  //   (connection: SocketStream, req: FastifyRequest) => {
+  //     console.log('WebSocket client connected.')
 
-  //   connection.socket.on('message', (message: string) => {
-  //     console.log('Received message:', message)
-  //     connection.socket.send('Echo: ' + message)
-  //   })
+  //     connection.socket.on('message', (message: string) => {
+  //       console.log('Received message:', message)
+  //       connection.socket.send('Echo: ' + message)
+  //     })
 
-  //   connection.socket.on('close', () => {
-  //     console.log('WebSocket client disconnected.')
-  //   })
-  // })
+  //     connection.socket.on('close', () => {
+  //       console.log('WebSocket client disconnected.')
+  //     })
+  //   },
+  // )
 }

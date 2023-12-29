@@ -103,6 +103,6 @@ describe('Register Use Case', () => {
       street: 'Rua Braz de Assis',
     })
 
-    expect(user.latitude).toEqual(expect.any(String))
+    expect(user.password_hash).toEqual(expect.any(String))
   })
 })

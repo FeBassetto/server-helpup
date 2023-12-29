@@ -82,8 +82,6 @@ export class PrismaUsersRepository implements UsersRepository {
   }: getFriendSuggestionsPayload): Promise<User[]> {
     const limit = 10
 
-    console.log(latitude, longitude, offset, ignoreIdList)
-
     const suggestions = await prisma.$queryRaw<User[]>`
       SELECT * FROM "users"
       WHERE "id" NOT IN (${Prisma.join(ignoreIdList)})

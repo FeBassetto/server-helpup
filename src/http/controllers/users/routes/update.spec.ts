@@ -1,6 +1,6 @@
 import { hash } from 'bcryptjs'
 import request from 'supertest'
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import { describe, afterAll, beforeAll, beforeEach, expect, it } from 'vitest'
 
 import { app } from '@/app'
 
@@ -9,7 +9,7 @@ import { UsersRepository } from '@/repositories/users-repository'
 
 let usersRepository: UsersRepository
 
-describe('Profile (e2e)', () => {
+describe('Update (e2e)', () => {
   beforeAll(async () => {
     await app.ready()
   })
@@ -22,7 +22,7 @@ describe('Profile (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to get profile', async () => {
+  it('should be able to update user data', async () => {
     const email = 'felipebtu9@gmail.com'
     const password = 'senha123'
 
@@ -41,34 +41,20 @@ describe('Profile (e2e)', () => {
       password_hash: await hash(password, 6),
     })
 
-    const { body } = await request(app.server)
+    const { body: tokenBody } = await request(app.server)
       .post('/api/users/sessions')
       .send({
         email,
         password,
       })
 
-    const { body: profileBody } = await request(app.server)
-      .get('/api/users')
-      .set('Authorization', `Bearer ${body.token}`)
-      .send()
+    const token = tokenBody.token
 
-    const expectedProperties = [
-      'id',
-      'name',
-      'nick',
-      'description',
-      'profile_url',
-      'email',
-      'city',
-      'longitude',
-      'latitude',
-      'cep',
-      'created_at',
-    ]
+    const { body } = await request(app.server)
+      .patch('/api/users')
+      .send({ nick: 'update' })
+      .set('Authorization', `Bearer ${token}`)
 
-    expectedProperties.forEach((property) => {
-      expect(profileBody.user.data).toHaveProperty(property)
-    })
+    expect(body.nick).toEqual('update')
   })
 })

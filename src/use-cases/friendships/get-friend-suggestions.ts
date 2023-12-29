@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { usersErrorsConstants } from '../users/errors/constants'
 
 import { FriendshipsRepository } from '@/repositories/friendships-repository'
@@ -40,6 +41,20 @@ export class GetFriendSuggestionsUseCase {
       offset,
     })
 
-    return friendSuggestions
+    const sanitizedSuggestions = friendSuggestions.map(
+      ({
+        password_hash,
+        latitude,
+        longitude,
+        is_admin,
+        is_confirmed,
+        is_deleted,
+        cep,
+        created_at,
+        ...rest
+      }) => rest,
+    )
+
+    return sanitizedSuggestions
   }
 }

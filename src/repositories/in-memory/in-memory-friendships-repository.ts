@@ -13,7 +13,7 @@ export class InMemoryFriendshipRepository implements FriendshipsRepository {
   async createFriendship({
     userId1,
     userId2,
-  }: FrendshipPayload): Promise<void> {
+  }: FrendshipPayload): Promise<Friendship> {
     const newFriendship: Friendship = {
       id: randomUUID(),
       userId1,
@@ -23,6 +23,8 @@ export class InMemoryFriendshipRepository implements FriendshipsRepository {
     }
 
     this.friendships.push(newFriendship)
+
+    return newFriendship
   }
 
   async getFriendshipByUsersId({
