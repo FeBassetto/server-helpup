@@ -4,10 +4,11 @@ import { ZodError } from 'zod'
 import fastifyCookie from '@fastify/cookie'
 import fastifyJwt from '@fastify/jwt'
 import multipart from '@fastify/multipart'
-import fastifyWebsocket from '@fastify/websocket'
+import fastifyWebsocket, { SocketStream } from '@fastify/websocket'
 
 import { env } from './env'
 import { friendshipsRoutes } from './http/controllers/friendships/routes'
+import { notificationsRoutes } from './http/controllers/notifications/routes'
 import { pingRoutes } from './http/controllers/ping/routes'
 import { usersRoutes } from './http/controllers/users/routes'
 import { AppError } from './shared/errors/AppError'
@@ -28,12 +29,14 @@ app.register(fastifyJwt, {
 app.register(fastifyWebsocket)
 app.register(multipart, { attachFieldsToBody: true })
 app.register(fastifyCookie)
+app.decorate('connections', new Map<string, SocketStream>())
 
 app.register(
   async (instance, opts, next) => {
     instance.register(pingRoutes)
     instance.register(usersRoutes, { prefix: '/users' })
     instance.register(friendshipsRoutes, { prefix: '/friendships' })
+    instance.register(notificationsRoutes, { prefix: '/notifications' })
 
     next()
   },
