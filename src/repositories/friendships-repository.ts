@@ -1,13 +1,20 @@
 import { Friendship, Prisma } from '@prisma/client'
 
-export interface FrendshipPayload {
-  userId1: string
-  userId2: string
+export interface FriendshipPayload {
+  senderId: string
+  senderName: string
+  receiverId: string
+  receiverName: string
+}
+
+export interface GetFriendshipPayload {
+  senderId: string
+  receiverId: string
 }
 
 export interface FriendshipsRepository {
-  createFriendship(data: FrendshipPayload): Promise<Friendship>
-  getFriendshipByUsersId(data: FrendshipPayload): Promise<Friendship | null>
+  createFriendship(data: FriendshipPayload): Promise<Friendship>
+  getFriendshipByUsersId(data: GetFriendshipPayload): Promise<Friendship | null>
   getFriendShipById(friendshipId: string): Promise<Friendship | null>
   getAllUserFriendships(userId: string): Promise<Friendship[]>
   getAllUserFriendshipsRequest(userId: string): Promise<Friendship[]>

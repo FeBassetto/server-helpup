@@ -54,8 +54,10 @@ describe('Get profile friendships', () => {
     })
 
     const friendship = await friendshipRepository.createFriendship({
-      userId1: me.id,
-      userId2: friend.id,
+      senderId: me.id,
+      receiverId: friend.id,
+      receiverName: friend.name,
+      senderName: me.name,
     })
 
     await friendshipRepository.updateFriendshipById(

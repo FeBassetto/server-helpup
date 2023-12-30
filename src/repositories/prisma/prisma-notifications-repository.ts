@@ -5,12 +5,34 @@ import { NotificationRepository } from '../notifications-repository'
 import { prisma } from '@/lib/prisma'
 
 export class PrismaNotificationRepository implements NotificationRepository {
-  async createByUserId(userId: string, type: NotificationType): Promise<void> {
+  async getNotificationById(
+    notificationId: string,
+  ): Promise<Notification | null> {
+    return await prisma.notification.findUnique({
+      where: { id: notificationId },
+    })
+  }
+
+  async createByUserId(
+    userId: string,
+    type: NotificationType,
+    id?: string,
+  ): Promise<void> {
+    const notificationData: {
+      type: NotificationType
+      user_id: string
+      id?: string
+    } = {
+      type,
+      user_id: userId,
+    }
+
+    if (id) {
+      notificationData.id = id
+    }
+
     await prisma.notification.create({
-      data: {
-        type,
-        user_id: userId,
-      },
+      data: notificationData,
     })
   }
 

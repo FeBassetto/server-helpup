@@ -62,8 +62,10 @@ describe('Send Friend Suggestions (e2e)', () => {
     })
 
     const friendShip = await friendShipsRepository.createFriendship({
-      userId1: user.id,
-      userId2: otherUser.id,
+      senderId: user.id,
+      receiverId: otherUser.id,
+      receiverName: otherUser.name,
+      senderName: user.name,
     })
 
     const { body: tokenBody } = await request(app.server)
@@ -76,7 +78,7 @@ describe('Send Friend Suggestions (e2e)', () => {
     const token = tokenBody.token
 
     const { statusCode } = await request(app.server)
-      .patch(`/api/friendships/friendship-status/${friendShip.id}`)
+      .patch(`/api/friendships/status/${friendShip.id}`)
       .send({ accept: true })
       .set('Authorization', `Bearer ${token}`)
 

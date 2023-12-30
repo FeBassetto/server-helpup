@@ -56,12 +56,12 @@ describe('Send friendships', () => {
       password_hash: await hash(password, 6),
     })
 
-    await sut.execute({ userId1: me.id, userId2: friend.id })
+    await sut.execute({ senderId: me.id, receiverId: friend.id })
   })
 
   it('should not be able to send friendship with inexistent id', async () => {
     await expect(
-      sut.execute({ userId1: 'non-id', userId2: 'non-id' }),
+      sut.execute({ senderId: 'non-id', receiverId: 'non-id' }),
     ).rejects.toThrow(usersErrorsConstants.ACCOUNT_NOT_FOUND.message)
   })
 
@@ -85,7 +85,7 @@ describe('Send friendships', () => {
     })
 
     await expect(
-      sut.execute({ userId1: me.id, userId2: 'non-id' }),
+      sut.execute({ senderId: me.id, receiverId: 'non-id' }),
     ).rejects.toThrow(friendshipErrorsConstants.FRIENDSHIP_NOT_ALLOWED.message)
   })
 
@@ -124,8 +124,10 @@ describe('Send friendships', () => {
     })
 
     const friendShip = await friendshipRepository.createFriendship({
-      userId1: me.id,
-      userId2: friend.id,
+      senderId: me.id,
+      receiverId: friend.id,
+      receiverName: friend.name,
+      senderName: me.name,
     })
 
     await friendshipRepository.updateFriendshipById(
@@ -134,7 +136,7 @@ describe('Send friendships', () => {
     )
 
     await expect(
-      sut.execute({ userId1: me.id, userId2: friend.id }),
+      sut.execute({ senderId: me.id, receiverId: friend.id }),
     ).rejects.toThrow(
       friendshipErrorsConstants.FRIENDSHIP_ALREADY_EXISTS.message,
     )
@@ -175,8 +177,10 @@ describe('Send friendships', () => {
     })
 
     const friendShip = await friendshipRepository.createFriendship({
-      userId1: me.id,
-      userId2: friend.id,
+      senderId: me.id,
+      receiverId: friend.id,
+      receiverName: friend.name,
+      senderName: me.name,
     })
 
     await friendshipRepository.updateFriendshipById(
@@ -185,7 +189,7 @@ describe('Send friendships', () => {
     )
 
     await expect(
-      sut.execute({ userId1: me.id, userId2: friend.id }),
+      sut.execute({ senderId: me.id, receiverId: friend.id }),
     ).rejects.toThrow(friendshipErrorsConstants.FRIENDSHIP_NOT_ACCEPT.message)
   })
 
@@ -224,12 +228,14 @@ describe('Send friendships', () => {
     })
 
     await friendshipRepository.createFriendship({
-      userId1: me.id,
-      userId2: friend.id,
+      senderId: me.id,
+      receiverId: friend.id,
+      receiverName: friend.name,
+      senderName: me.name,
     })
 
     await expect(
-      sut.execute({ userId1: me.id, userId2: friend.id }),
+      sut.execute({ senderId: me.id, receiverId: friend.id }),
     ).rejects.toThrow(friendshipErrorsConstants.FRIENDSHIP_ALREADY_SENT.message)
   })
 
@@ -268,8 +274,10 @@ describe('Send friendships', () => {
     })
 
     const friendShip = await friendshipRepository.createFriendship({
-      userId1: friend.id,
-      userId2: me.id,
+      senderId: friend.id,
+      receiverId: me.id,
+      senderName: friend.name,
+      receiverName: me.name,
     })
 
     await friendshipRepository.updateFriendshipById(
@@ -277,6 +285,6 @@ describe('Send friendships', () => {
       friendShip.id,
     )
 
-    await sut.execute({ userId1: me.id, userId2: friend.id })
+    await sut.execute({ senderId: me.id, receiverId: friend.id })
   })
 })

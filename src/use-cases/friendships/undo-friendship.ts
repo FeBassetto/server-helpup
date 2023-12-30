@@ -20,21 +20,21 @@ export class UndoFriendshipUseCase {
     }
 
     if (
-      existsFriendShip?.userId1 !== userId &&
-      existsFriendShip?.userId2 !== userId
+      existsFriendShip?.senderId !== userId &&
+      existsFriendShip?.receiverId !== userId
     ) {
       throw new AppError(friendshipErrorsConstants.ACTION_NOT_ALLOWED)
     }
 
     if (
-      existsFriendShip.userId2 === userId &&
+      existsFriendShip.receiverId === userId &&
       existsFriendShip.isAccepted !== true
     ) {
       throw new AppError(friendshipErrorsConstants.ACTION_NOT_ALLOWED)
     }
 
     if (
-      existsFriendShip.userId1 === userId &&
+      existsFriendShip.senderId === userId &&
       existsFriendShip.isAccepted === false
     ) {
       throw new AppError(friendshipErrorsConstants.ACTION_NOT_ALLOWED)

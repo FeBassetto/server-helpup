@@ -55,8 +55,10 @@ describe('Get friend friendships', () => {
     })
 
     const friendship = await friendshipRepository.createFriendship({
-      userId1: me.id,
-      userId2: friend.id,
+      senderId: me.id,
+      receiverId: friend.id,
+      receiverName: friend.name,
+      senderName: me.name,
     })
 
     await friendshipRepository.updateFriendshipById(
@@ -141,8 +143,10 @@ describe('Get friend friendships', () => {
     })
 
     const friendship = await friendshipRepository.createFriendship({
-      userId1: secondaryFriend.id,
-      userId2: friend.id,
+      senderId: secondaryFriend.id,
+      receiverId: friend.id,
+      receiverName: friend.name,
+      senderName: me.name,
     })
 
     await friendshipRepository.updateFriendshipById(
@@ -190,8 +194,10 @@ describe('Get friend friendships', () => {
     })
 
     const friendship = await friendshipRepository.createFriendship({
-      userId1: friend.id,
-      userId2: me.id,
+      senderId: friend.id,
+      receiverId: me.id,
+      senderName: friend.name,
+      receiverName: me.name,
     })
 
     await friendshipRepository.updateFriendshipById(
@@ -239,8 +245,10 @@ describe('Get friend friendships', () => {
     })
 
     const friendship = await friendshipRepository.createFriendship({
-      userId1: me.id,
-      userId2: friend.id,
+      senderId: me.id,
+      receiverId: friend.id,
+      receiverName: friend.name,
+      senderName: me.name,
     })
 
     await friendshipRepository.updateFriendshipById(

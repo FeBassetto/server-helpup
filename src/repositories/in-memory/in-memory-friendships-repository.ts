@@ -11,15 +11,19 @@ export class InMemoryFriendshipRepository implements FriendshipsRepository {
   private friendships: Friendship[] = []
 
   async createFriendship({
-    userId1,
-    userId2,
+    senderId,
+    receiverId,
+    receiverName,
+    senderName,
   }: FrendshipPayload): Promise<Friendship> {
     const newFriendship: Friendship = {
       id: randomUUID(),
-      userId1,
-      userId2,
+      senderId,
+      receiverId,
       isAccepted: null,
       created_at: new Date(),
+      receiverName,
+      senderName,
     }
 
     this.friendships.push(newFriendship)
@@ -28,14 +32,14 @@ export class InMemoryFriendshipRepository implements FriendshipsRepository {
   }
 
   async getFriendshipByUsersId({
-    userId1,
-    userId2,
+    senderId,
+    receiverId,
   }: FrendshipPayload): Promise<Friendship | null> {
     return (
       this.friendships.find(
         (f) =>
-          (f.userId1 === userId1 && f.userId2 === userId2) ||
-          (f.userId1 === userId2 && f.userId2 === userId1),
+          (f.senderId === senderId && f.receiverId === receiverId) ||
+          (f.senderId === receiverId && f.receiverId === senderId),
       ) || null
     )
   }
@@ -47,25 +51,26 @@ export class InMemoryFriendshipRepository implements FriendshipsRepository {
   async getAllUserFriendships(userId: string): Promise<Friendship[]> {
     return this.friendships.filter(
       (f) =>
-        (f.userId1 === userId || f.userId2 === userId) && f.isAccepted === true,
+        (f.senderId === userId || f.receiverId === userId) &&
+        f.isAccepted === true,
     )
   }
 
   async getAllUserFriendshipsRequest(userId: string): Promise<Friendship[]> {
     return this.friendships.filter(
-      (f) => f.userId1 === userId || f.userId2 === userId,
+      (f) => f.senderId === userId || f.receiverId === userId,
     )
   }
 
   async getFriendshipInvitates(userId: string): Promise<Friendship[]> {
     return this.friendships.filter(
-      (f) => f.userId2 === userId && f.isAccepted === null,
+      (f) => f.receiverId === userId && f.isAccepted === null,
     )
   }
 
   async getSendFriendshipInvitates(userId: string): Promise<Friendship[]> {
     return this.friendships.filter(
-      (f) => f.userId1 === userId && f.isAccepted === null,
+      (f) => f.senderId === userId && f.isAccepted === null,
     )
   }
 

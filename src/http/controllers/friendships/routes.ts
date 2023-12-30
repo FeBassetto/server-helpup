@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify'
 
+import { friendInvitations } from './routes/friend-invitations'
 import { friendSuggestions } from './routes/friend-suggestions'
 import { SendFriendShip } from './routes/send-friendship'
 import { undoFriendship } from './routes/undo-friendship'
@@ -8,22 +9,20 @@ import { updateFriendship } from './routes/update-friendship'
 import { verifyValidUser } from '@/http/middlewares/verify-valid-user'
 
 export async function friendshipsRoutes(app: FastifyInstance) {
-  app.get(
-    '/friend-suggestions',
-    { preHandler: [verifyValidUser] },
-    friendSuggestions,
-  )
+  app.get('/suggestions', { preHandler: [verifyValidUser] }, friendSuggestions)
 
-  app.post('/send-friendship', { onRequest: [verifyValidUser] }, SendFriendShip)
+  app.get('/invites', { preHandler: [verifyValidUser] }, friendInvitations)
+
+  app.post('/send', { onRequest: [verifyValidUser] }, SendFriendShip)
 
   app.patch(
-    '/friendship-status/:friendshipId',
+    '/status/:friendshipId',
     { onRequest: [verifyValidUser] },
     updateFriendship,
   )
 
   app.delete(
-    '/undo-friendship/:friendshipId',
+    '/undo/:friendshipId',
     { onRequest: [verifyValidUser] },
     undoFriendship,
   )

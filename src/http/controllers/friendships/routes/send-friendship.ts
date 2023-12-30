@@ -19,7 +19,7 @@ export async function SendFriendShip(
 
   const sendFriendshipUseCase = makeSendFriendshipUseCase()
 
-  await sendFriendshipUseCase.execute({ userId1: sub, userId2: sentUserId })
+  await sendFriendshipUseCase.execute({ senderId: sub, receiverId: sentUserId })
 
   reply.status(201).send()
 }

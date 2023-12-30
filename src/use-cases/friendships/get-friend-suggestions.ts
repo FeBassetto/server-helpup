@@ -29,7 +29,7 @@ export class GetFriendSuggestionsUseCase {
       await this.friendshipsRepository.getAllUserFriendshipsRequest(userId)
 
     userFriendShips.forEach((friendship) => {
-      ignoreIdList.push(friendship.userId1, friendship.userId2)
+      ignoreIdList.push(friendship.senderId, friendship.receiverId)
     })
 
     ignoreIdList = [...new Set(ignoreIdList)]

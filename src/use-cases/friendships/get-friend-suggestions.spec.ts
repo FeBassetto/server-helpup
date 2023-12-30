@@ -71,8 +71,10 @@ describe('Get friend suggestions', () => {
     })
 
     friendshipRepository.createFriendship({
-      userId1: friend.id,
-      userId2: me.id,
+      senderId: friend.id,
+      receiverId: me.id,
+      receiverName: me.name,
+      senderName: friend.name,
     })
 
     const response = await sut.execute({ offset: 0, userId: me.id })

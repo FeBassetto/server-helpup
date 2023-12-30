@@ -67,7 +67,7 @@ describe('Send Friend Suggestions (e2e)', () => {
     const token = tokenBody.token
 
     const { statusCode } = await request(app.server)
-      .post('/api/friendships/send-friendship')
+      .post('/api/friendships/send')
       .send({ sentUserId: otherUser.id })
       .set('Authorization', `Bearer ${token}`)
 

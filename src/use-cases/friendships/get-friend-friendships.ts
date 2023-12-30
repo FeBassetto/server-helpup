@@ -13,8 +13,8 @@ export class GetFriendFriendshipsUseCase {
 
   async execute({ friendId, userId }: GetFriendFriendshipsUseCaseRequest) {
     const isFriends = await this.friendshipRepository.getFriendshipByUsersId({
-      userId1: userId,
-      userId2: friendId,
+      senderId: userId,
+      receiverId: friendId,
     })
 
     let friendFriendShipList: Friendship[] = []
@@ -26,7 +26,9 @@ export class GetFriendFriendshipsUseCase {
 
     const friendFriendShipListFiltered = friendFriendShipList
       .filter((friendship) => {
-        return friendship.userId1 !== userId && friendship.userId2 !== userId
+        return (
+          friendship.senderId !== userId && friendship.receiverId !== userId
+        )
       })
       .map(({ isAccepted, created_at, ...rest }) => rest)
 

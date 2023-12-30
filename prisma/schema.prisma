@@ -26,8 +26,8 @@ model User {
   is_deleted    Boolean  @default(false)
 
   ConfirmationCode     ConfirmationCode[]
-  FriendshipsInitiated Friendship[]       @relation("User1Friendships")
-  FriendshipsReceived  Friendship[]       @relation("User2Friendships")
+  FriendshipsInitiated Friendship[]       @relation("SenderFriendships")
+  FriendshipsReceived  Friendship[]       @relation("ReceiverFriendships")
   Notification         Notification[]
 
   @@map("users")
@@ -46,14 +46,17 @@ model ConfirmationCode {
 model Friendship {
   id String @id @default(uuid())
 
-  userId1    String
-  userId2    String
-  isAccepted Boolean?
+  senderId   String
+  senderName String
+
+  receiverId   String
+  receiverName String
+  isAccepted   Boolean?
 
   created_at DateTime @default(now())
 
-  user1 User @relation("User1Friendships", fields: [userId1], references: [id])
-  user2 User @relation("User2Friendships", fields: [userId2], references: [id])
+  sender   User @relation("SenderFriendships", fields: [senderId], references: [id])
+  receiver User @relation("ReceiverFriendships", fields: [receiverId], references: [id])
 
   @@map("friendships")
 }

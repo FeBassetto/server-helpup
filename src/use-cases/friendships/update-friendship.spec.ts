@@ -55,8 +55,10 @@ describe('Update friendships', () => {
     })
 
     const friendship = await friendshipRepository.createFriendship({
-      userId1: friend.id,
-      userId2: me.id,
+      senderId: friend.id,
+      receiverId: me.id,
+      senderName: friend.name,
+      receiverName: me.name,
     })
 
     await sut.execute({
@@ -126,8 +128,10 @@ describe('Update friendships', () => {
     })
 
     const friendship = await friendshipRepository.createFriendship({
-      userId1: friend.id,
-      userId2: otherFriend.id,
+      senderId: friend.id,
+      receiverId: otherFriend.id,
+      senderName: friend.name,
+      receiverName: otherFriend.name,
     })
 
     await expect(
@@ -174,8 +178,10 @@ describe('Update friendships', () => {
     })
 
     const friendship = await friendshipRepository.createFriendship({
-      userId1: me.id,
-      userId2: friend.id,
+      senderId: me.id,
+      receiverId: friend.id,
+      senderName: friend.name,
+      receiverName: me.name,
     })
 
     await expect(
@@ -222,8 +228,10 @@ describe('Update friendships', () => {
     })
 
     const friendship = await friendshipRepository.createFriendship({
-      userId1: friend.id,
-      userId2: me.id,
+      senderId: friend.id,
+      receiverId: me.id,
+      senderName: friend.name,
+      receiverName: me.name,
     })
 
     await sut.execute({

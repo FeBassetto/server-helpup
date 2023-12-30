@@ -1,34 +1,39 @@
 import { Friendship, Prisma } from '@prisma/client'
 
 import {
-  FrendshipPayload,
   FriendshipsRepository,
+  FriendshipPayload,
+  GetFriendshipPayload,
 } from '../friendships-repository'
 
 import { prisma } from '@/lib/prisma'
 
 export class PrismaFriendshipRepository implements FriendshipsRepository {
   async createFriendship({
-    userId1,
-    userId2,
-  }: FrendshipPayload): Promise<Friendship> {
+    senderId,
+    receiverId,
+    receiverName,
+    senderName,
+  }: FriendshipPayload): Promise<Friendship> {
     return await prisma.friendship.create({
       data: {
-        userId1,
-        userId2,
+        senderId,
+        receiverId,
+        receiverName,
+        senderName,
       },
     })
   }
 
   async getFriendshipByUsersId({
-    userId1,
-    userId2,
-  }: FrendshipPayload): Promise<Friendship | null> {
+    senderId,
+    receiverId,
+  }: GetFriendshipPayload): Promise<Friendship | null> {
     return await prisma.friendship.findFirst({
       where: {
         OR: [
-          { userId1, userId2 },
-          { userId1: userId2, userId2: userId1 },
+          { senderId, receiverId },
+          { senderId: receiverId, receiverId: senderId },
         ],
       },
     })
@@ -43,7 +48,7 @@ export class PrismaFriendshipRepository implements FriendshipsRepository {
   async getAllUserFriendships(userId: string): Promise<Friendship[]> {
     return await prisma.friendship.findMany({
       where: {
-        OR: [{ userId1: userId }, { userId2: userId }],
+        OR: [{ senderId: userId }, { receiverId: userId }],
         isAccepted: true,
       },
     })
@@ -52,20 +57,20 @@ export class PrismaFriendshipRepository implements FriendshipsRepository {
   async getAllUserFriendshipsRequest(userId: string): Promise<Friendship[]> {
     return await prisma.friendship.findMany({
       where: {
-        OR: [{ userId1: userId }, { userId2: userId }],
+        OR: [{ senderId: userId }, { receiverId: userId }],
       },
     })
   }
 
   async getFriendshipInvitates(userId: string): Promise<Friendship[]> {
     return await prisma.friendship.findMany({
-      where: { userId2: userId, isAccepted: null },
+      where: { receiverId: userId, isAccepted: null },
     })
   }
 
   async getSendFriendshipInvitates(userId: string): Promise<Friendship[]> {
     return await prisma.friendship.findMany({
-      where: { userId1: userId, isAccepted: null },
+      where: { senderId: userId, isAccepted: null },
     })
   }
 

@@ -7,9 +7,23 @@ import { NotificationRepository } from '../notifications-repository'
 export class InMemoryNotificationRepository implements NotificationRepository {
   private notifications: Notification[] = []
 
-  async createByUserId(userId: string, type: NotificationType): Promise<void> {
+  async getNotificationById(
+    notificationId: string,
+  ): Promise<Notification | null> {
+    const notification = this.notifications.find(
+      (notification) => notification.id === notificationId,
+    )
+
+    return notification || null
+  }
+
+  async createByUserId(
+    userId: string,
+    type: NotificationType,
+    id?: string,
+  ): Promise<void> {
     const newNotification: Notification = {
-      id: randomUUID(),
+      id: id || randomUUID(),
       user_id: userId,
       type,
       read_at: null,

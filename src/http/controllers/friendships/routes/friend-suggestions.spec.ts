@@ -67,7 +67,7 @@ describe('Friend Suggestions (e2e)', () => {
     const token = tokenBody.token
 
     const { body } = await request(app.server)
-      .get('/api/friendships/friend-suggestions?offset=0')
+      .get('/api/friendships/suggestions?offset=0')
       .set('Authorization', `Bearer ${token}`)
 
     expect(body.length).toEqual(1)

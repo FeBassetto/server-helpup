@@ -62,8 +62,10 @@ describe('Send Friend Suggestions (e2e)', () => {
     })
 
     const friendShip = await friendShipsRepository.createFriendship({
-      userId1: user.id,
-      userId2: otherUser.id,
+      senderId: user.id,
+      receiverId: otherUser.id,
+      receiverName: otherUser.name,
+      senderName: user.name,
     })
 
     await friendShipsRepository.updateFriendshipById(
@@ -81,7 +83,7 @@ describe('Send Friend Suggestions (e2e)', () => {
     const token = tokenBody.token
 
     const { statusCode } = await request(app.server)
-      .delete(`/api/friendships/undo-friendship/${friendShip.id}`)
+      .delete(`/api/friendships/undo/${friendShip.id}`)
       .set('Authorization', `Bearer ${token}`)
 
     expect(statusCode).toEqual(204)
