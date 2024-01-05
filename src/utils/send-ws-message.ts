@@ -1,12 +1,14 @@
 import { FastifyInstance } from 'fastify'
 
-export function sendWsMessage(
+export function sendWsMessages(
   app: FastifyInstance,
-  userId: string,
+  userIds: string[],
   message: string,
 ) {
-  const connection = app.connections.get(userId)
-  if (connection) {
-    connection.socket.send(message)
-  }
+  userIds.forEach((userId) => {
+    const connection = app.connections.get(userId)
+    if (connection) {
+      connection.socket.send(message)
+    }
+  })
 }

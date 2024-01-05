@@ -8,8 +8,8 @@ export interface FriendshipPayload {
 }
 
 export interface GetFriendshipPayload {
-  senderId: string
-  receiverId: string
+  userId: string
+  friendId: string
 }
 
 export interface FriendshipsRepository {

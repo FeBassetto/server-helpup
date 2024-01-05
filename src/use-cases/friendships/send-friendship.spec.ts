@@ -62,7 +62,7 @@ describe('Send friendships', () => {
   it('should not be able to send friendship with inexistent id', async () => {
     await expect(
       sut.execute({ senderId: 'non-id', receiverId: 'non-id' }),
-    ).rejects.toThrow(usersErrorsConstants.ACCOUNT_NOT_FOUND.message)
+    ).rejects.toThrow(usersErrorsConstants.ACTION_NOT_ALLOWED.message)
   })
 
   it('should not be able to send friendship with inexistent friend id', async () => {

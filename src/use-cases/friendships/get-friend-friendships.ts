@@ -13,8 +13,8 @@ export class GetFriendFriendshipsUseCase {
 
   async execute({ friendId, userId }: GetFriendFriendshipsUseCaseRequest) {
     const isFriends = await this.friendshipRepository.getFriendshipByUsersId({
-      senderId: userId,
-      receiverId: friendId,
+      userId,
+      friendId,
     })
 
     let friendFriendShipList: Friendship[] = []

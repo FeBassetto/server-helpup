@@ -20,6 +20,7 @@ const envSchema = z.object({
   S3_REGION: z.string(),
   S3_NAME: z.string(),
   S3_BASE_URL: z.string(),
+  RESULTS_PARTICIPANTS_NUMBER: z.coerce.number().default(6),
 })
 
 const _env = envSchema.safeParse(process.env)

@@ -3,8 +3,9 @@ import { randomUUID } from 'crypto'
 import { Friendship } from '@prisma/client'
 
 import {
-  FrendshipPayload,
+  FriendshipPayload,
   FriendshipsRepository,
+  GetFriendshipPayload,
 } from '../friendships-repository'
 
 export class InMemoryFriendshipRepository implements FriendshipsRepository {
@@ -15,7 +16,7 @@ export class InMemoryFriendshipRepository implements FriendshipsRepository {
     receiverId,
     receiverName,
     senderName,
-  }: FrendshipPayload): Promise<Friendship> {
+  }: FriendshipPayload): Promise<Friendship> {
     const newFriendship: Friendship = {
       id: randomUUID(),
       senderId,
@@ -32,14 +33,14 @@ export class InMemoryFriendshipRepository implements FriendshipsRepository {
   }
 
   async getFriendshipByUsersId({
-    senderId,
-    receiverId,
-  }: FrendshipPayload): Promise<Friendship | null> {
+    friendId,
+    userId,
+  }: GetFriendshipPayload): Promise<Friendship | null> {
     return (
       this.friendships.find(
         (f) =>
-          (f.senderId === senderId && f.receiverId === receiverId) ||
-          (f.senderId === receiverId && f.receiverId === senderId),
+          (f.senderId === friendId && f.receiverId === userId) ||
+          (f.senderId === userId && f.receiverId === friendId),
       ) || null
     )
   }

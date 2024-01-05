@@ -2,7 +2,7 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
 import { makeSendFriendshipUseCase } from '@/use-cases/friendships/factories/make-send-friendship-use-case'
-import { sendWsMessage } from '@/utils/send-ws-message'
+import { sendWsMessages } from '@/utils/send-ws-message'
 
 export async function SendFriendShip(
   this: FastifyInstance,
@@ -23,7 +23,7 @@ export async function SendFriendShip(
 
   await sendFriendshipUseCase.execute({ senderId: sub, receiverId: sentUserId })
 
-  sendWsMessage(this, sentUserId, 'new-notification')
+  sendWsMessages(this, [sentUserId], 'notification:friendship')
 
   reply.status(201).send()
 }

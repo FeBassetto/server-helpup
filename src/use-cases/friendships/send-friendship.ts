@@ -42,8 +42,8 @@ export class SendFriendshipUseCase {
 
     const existsFriendship =
       await this.friendshipsRepository.getFriendshipByUsersId({
-        senderId,
-        receiverId,
+        userId: senderId,
+        friendId: receiverId,
       })
 
     if (existsFriendship?.isAccepted === true) {

@@ -26,14 +26,14 @@ export class PrismaFriendshipRepository implements FriendshipsRepository {
   }
 
   async getFriendshipByUsersId({
-    senderId,
-    receiverId,
+    userId,
+    friendId,
   }: GetFriendshipPayload): Promise<Friendship | null> {
     return await prisma.friendship.findFirst({
       where: {
         OR: [
-          { senderId, receiverId },
-          { senderId: receiverId, receiverId: senderId },
+          { receiverId: userId, senderId: friendId },
+          { receiverId: friendId, senderId: userId },
         ],
       },
     })
