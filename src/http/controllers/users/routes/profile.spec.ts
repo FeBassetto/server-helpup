@@ -34,7 +34,7 @@ describe('Profile (e2e)', () => {
       is_admin: false,
       is_confirmed: true,
       is_deleted: false,
-      latitude: '-23.550520',
+      latitude: '-23.55052',
       longitude: '-46.633308',
       name: 'João da Silva',
       nick: 'joaosilva',
@@ -68,7 +68,7 @@ describe('Profile (e2e)', () => {
     ]
 
     expectedProperties.forEach((property) => {
-      expect(profileBody.user).toHaveProperty(property)
+      expect(profileBody.user.data).toHaveProperty(property)
     })
   })
 })

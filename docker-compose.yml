@@ -1,13 +1,18 @@
 version: '3.9'
 
 services:
-  app:
-    build: .
-    container_name: helpup_server
+  api-helpup-pg:
+    image: bitnami/postgresql
     ports:
-      - 3333:3333
+      - 5432:5432
+    environment:
+      - POSTGRESQL_USERNAME=felipe
+      - POSTGRESQL_PASSWORD=helpuppass
+      - POSTGRESQL_DATABASE=helpup
+    container_name: db_helpup
     volumes:
-      - .:/usr/app
+      - pgdata:/data/postgres
+    hostname: db_helpup
 
 volumes:
   pgdata:

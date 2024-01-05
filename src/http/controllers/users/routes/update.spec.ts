@@ -1,0 +1,60 @@
+import { hash } from 'bcryptjs'
+import request from 'supertest'
+import { describe, afterAll, beforeAll, beforeEach, expect, it } from 'vitest'
+
+import { app } from '@/app'
+
+import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository'
+import { UsersRepository } from '@/repositories/users-repository'
+
+let usersRepository: UsersRepository
+
+describe('Update (e2e)', () => {
+  beforeAll(async () => {
+    await app.ready()
+  })
+
+  beforeEach(() => {
+    usersRepository = new PrismaUsersRepository()
+  })
+
+  afterAll(async () => {
+    await app.close()
+  })
+
+  it('should be able to update user data', async () => {
+    const email = 'felipebtu9@gmail.com'
+    const password = 'senha123'
+
+    await usersRepository.create({
+      email,
+      cep: '12345678',
+      city: 'São Paulo',
+      description: 'Uma breve descrição sobre o usuário.',
+      is_admin: false,
+      is_confirmed: true,
+      is_deleted: false,
+      latitude: '-23.55052',
+      longitude: '-46.633308',
+      name: 'João da Silva',
+      nick: 'joaosilva',
+      password_hash: await hash(password, 6),
+    })
+
+    const { body: tokenBody } = await request(app.server)
+      .post('/api/users/sessions')
+      .send({
+        email,
+        password,
+      })
+
+    const token = tokenBody.token
+
+    const { body } = await request(app.server)
+      .patch('/api/users')
+      .send({ nick: 'update' })
+      .set('Authorization', `Bearer ${token}`)
+
+    expect(body.nick).toEqual('update')
+  })
+})

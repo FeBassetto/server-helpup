@@ -7,6 +7,8 @@ declare module '@fastify/jwt' {
       isAdmin: boolean
       isConfirmed: boolean
       isDeleted: boolean
+      isDeleteMail?: boolean
+      isConfirmMail?: boolean
     }
   }
 }

@@ -33,3 +33,8 @@ jobs:
           MAIL_USER: 'o'
           MAIL_PASS: 'o'
           DELETE_MAIL_URL: '0'
+          S3_ACCESS_KEY: 'teste'
+          S3_SECRET_ACCESS_KEY: 'teste'
+          S3_REGION: 'teste'
+          S3_NAME: 'teste'
+          S3_BASE_URL: 'teste'

@@ -13,19 +13,25 @@ model User {
   name          String
   nick          String   @unique
   description   String
-  profile_url   String   @default("no_image.png")
+  profile_url   String   @default("users/default.jpg")
   email         String   @unique
   password_hash String
   city          String
-  longitude     String
-  latitude      String
+  longitude     Decimal
+  latitude      Decimal
   cep           String
   is_admin      Boolean  @default(false)
   is_confirmed  Boolean  @default(false)
   created_at    DateTime @default(now())
   is_deleted    Boolean  @default(false)
 
-  ConfirmationCode ConfirmationCode[]
+  ConfirmationCode     ConfirmationCode[]
+  FriendshipsInitiated Friendship[]       @relation("SenderFriendships")
+  FriendshipsReceived  Friendship[]       @relation("ReceiverFriendships")
+  Notification         Notification[]
+  Group                Group[]
+  Event                Event[]
+  Participant          Participant[]
 
   @@map("users")
 }
@@ -38,4 +44,107 @@ model ConfirmationCode {
   user_id String
 
   @@map("confirmation_codes")
+}
+
+model Friendship {
+  id String @id @default(uuid())
+
+  senderId   String
+  senderName String
+
+  receiverId   String
+  receiverName String
+  isAccepted   Boolean?
+
+  created_at DateTime @default(now())
+
+  sender   User @relation("SenderFriendships", fields: [senderId], references: [id])
+  receiver User @relation("ReceiverFriendships", fields: [receiverId], references: [id])
+
+  @@map("friendships")
+}
+
+enum NotificationType {
+  friendship_invitation
+  friendship_accept
+}
+
+model Notification {
+  id String @id @default(uuid())
+
+  type NotificationType
+
+  read_at    DateTime?
+  created_at DateTime  @default(now())
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id])
+
+  @@map("notifications")
+}
+
+model Group {
+  id String @id @default(uuid())
+
+  title       String   @unique
+  description String
+  city        String
+  created_at  DateTime @default(now())
+
+  admin_id String
+
+  adminId User @relation(fields: [admin_id], references: [id])
+
+  Event       Event[]
+  Participant Participant[]
+
+  @@map("groups")
+}
+
+enum EventType {
+  physical
+  visual
+  auditory
+  mental
+}
+
+model Event {
+  id String @id @default(uuid())
+
+  title       String    @unique
+  description String
+  street      String
+  number      Int
+  city        String
+  date        DateTime
+  type        EventType
+
+  created_at DateTime @default(now())
+
+  admin_id String
+  group_id String?
+
+  adminId User   @relation(fields: [admin_id], references: [id])
+  groupId Group? @relation(fields: [group_id], references: [id])
+
+  Participant Participant[]
+
+  @@map("events")
+}
+
+model Participant {
+  id String @id @default(uuid())
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id])
+
+  group_id String?
+  group    Group?  @relation(fields: [group_id], references: [id])
+
+  event_id String?
+  event    Event?  @relation(fields: [event_id], references: [id])
+
+  joined_at DateTime @default(now())
+
+  @@map("participants")
 }

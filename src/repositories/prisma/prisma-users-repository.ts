@@ -4,20 +4,15 @@ import {
   FindByEmailAndNickPayload,
   GetConfirmationCodeByMinutesPayload,
   UsersRepository,
+  getFriendSuggestionsPayload,
+  updatePasswordPaylaod,
+  updateUserByIdPayload,
 } from '../users-repository'
 
 import { prisma } from '@/lib/prisma'
 import { DayjsDateProvider } from '@/shared/providers/DateProvider/implementations/dayjs-date-provider'
 
 export class PrismaUsersRepository implements UsersRepository {
-  async create(data: Prisma.UserCreateInput): Promise<User> {
-    const user = await prisma.user.create({
-      data,
-    })
-
-    return user
-  }
-
   async findUserByEmail(email: string): Promise<User | null> {
     const user = await prisma.user.findUnique({ where: { email } })
 
@@ -79,6 +74,36 @@ export class PrismaUsersRepository implements UsersRepository {
     return confirmationCode
   }
 
+  async getFriendSuggestions({
+    latitude,
+    longitude,
+    offset,
+    ignoreIdList,
+  }: getFriendSuggestionsPayload): Promise<User[]> {
+    const limit = 10
+
+    const suggestions = await prisma.$queryRaw<User[]>`
+      SELECT * FROM "users"
+      WHERE "id" NOT IN (${Prisma.join(ignoreIdList)})
+      AND (
+      6371 * acos(
+        cos(radians(${latitude})) * cos(radians("latitude")) * cos(radians("longitude") - radians(${longitude})) +
+        sin(radians(${latitude})) * sin(radians("latitude"))
+      )
+    ) <= 100 
+      ORDER BY (
+        6371 * acos(
+          cos(radians(${latitude})) * cos(radians("latitude")) * cos(radians("longitude") - radians(${longitude})) +
+          sin(radians(${latitude})) * sin(radians("latitude"))
+        )
+      ) ASC
+      OFFSET ${offset}
+      LIMIT ${limit}
+    `
+
+    return suggestions
+  }
+
   async getUserDataById(id: string): Promise<User | null> {
     const user = await prisma.user.findUnique({
       where: { id },
@@ -95,6 +120,32 @@ export class PrismaUsersRepository implements UsersRepository {
     await prisma.user.update({
       where: { id },
       data: { is_deleted: true },
+    })
+  }
+
+  async create(data: Prisma.UserCreateInput): Promise<User> {
+    const user = await prisma.user.create({
+      data,
+    })
+
+    return user
+  }
+
+  async updateUserById({ data, userId }: updateUserByIdPayload): Promise<User> {
+    return await prisma.user.update({ where: { id: userId }, data })
+  }
+
+  async findUserByNick(nick: string): Promise<User | null> {
+    return await prisma.user.findUnique({ where: { nick } })
+  }
+
+  async updatePassword({
+    password_hash,
+    userId,
+  }: updatePasswordPaylaod): Promise<User> {
+    return await prisma.user.update({
+      where: { id: userId },
+      data: { password_hash },
     })
   }
 }

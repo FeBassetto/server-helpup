@@ -1,17 +1,18 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
+import { FastifyRequest } from 'fastify'
 
 import { AppError } from '@/shared/errors/AppError'
 import { usersErrorsConstants } from '@/use-cases/users/errors/constants'
 
-export async function verifyValidUser(
-  request: FastifyRequest,
-  reply: FastifyReply,
-) {
+export async function verifyValidUser(request: FastifyRequest) {
+  if (!request.headers.authorization) {
+    throw new AppError(usersErrorsConstants.UNAUTHORIZED)
+  }
+
   try {
     await request.jwtVerify()
   } catch (error) {
     console.error(error)
-    return reply.status(401).send({ message: 'Unauthorized' })
+    throw new AppError(usersErrorsConstants.UNAUTHORIZED)
   }
 
   if (!request.user.isConfirmed) {

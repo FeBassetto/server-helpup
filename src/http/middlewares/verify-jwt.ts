@@ -1,9 +1,16 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
+import { FastifyRequest } from 'fastify'
 
-export async function verifyJWT(request: FastifyRequest, reply: FastifyReply) {
+import { AppError } from '@/shared/errors/AppError'
+import { usersErrorsConstants } from '@/use-cases/users/errors/constants'
+
+export async function verifyJWT(request: FastifyRequest) {
+  if (!request.headers.authorization) {
+    throw new AppError(usersErrorsConstants.UNAUTHORIZED)
+  }
+
   try {
     await request.jwtVerify()
   } catch (error) {
-    return reply.status(401).send({ message: 'Unauthorized' })
+    throw new AppError(usersErrorsConstants.UNAUTHORIZED)
   }
 }

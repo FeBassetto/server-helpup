@@ -34,6 +34,18 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
     street: z.string(),
     city: z.string(),
     number: z.number().int(),
+    lat: z
+      .number()
+      .min(-90, { message: 'Latitude inválida. Deve estar entre -90 e 90.' })
+      .max(90, { message: 'Latitude inválida. Deve estar entre -90 e 90.' })
+      .optional(),
+    lon: z
+      .number()
+      .min(-180, {
+        message: 'Longitude inválida. Deve estar entre -180 e 180.',
+      })
+      .max(180, { message: 'Longitude inválida. Deve estar entre -180 e 180.' })
+      .optional(),
   })
 
   const data = registerBodySchema.parse(request.body)
@@ -46,6 +58,7 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
     {
       isAdmin: user.is_admin,
       isConfirmed: user.is_confirmed,
+      isConfirmMail: true,
     },
     {
       sign: {

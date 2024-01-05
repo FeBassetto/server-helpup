@@ -6,15 +6,19 @@ import {
   FindByEmailAndNickPayload,
   GetConfirmationCodeByMinutesPayload,
   UsersRepository,
+  getFriendSuggestionsPayload,
+  updatePasswordPaylaod,
+  updateUserByIdPayload,
 } from '../users-repository'
 
 import { AppError } from '@/shared/errors/AppError'
 import { DayjsDateProvider } from '@/shared/providers/DateProvider/implementations/dayjs-date-provider'
 import { usersErrorsConstants } from '@/use-cases/users/errors/constants'
+import { getDistanceBetweenCoordinates } from '@/utils/get-distance-between-coordenates'
 
 export class InMemoryUsersRepository implements UsersRepository {
-  public users: User[] = []
-  public confirmationCodes: ConfirmationCode[] = []
+  private users: User[] = []
+  private confirmationCodes: ConfirmationCode[] = []
 
   async create({
     cep,
@@ -42,8 +46,8 @@ export class InMemoryUsersRepository implements UsersRepository {
       is_admin: !!is_admin,
       is_confirmed: !!is_confirmed,
       is_deleted: !!is_deleted,
-      latitude,
-      longitude,
+      latitude: new Prisma.Decimal(String(latitude)),
+      longitude: new Prisma.Decimal(String(longitude)),
       name,
       nick,
       password_hash,
@@ -123,5 +127,108 @@ export class InMemoryUsersRepository implements UsersRepository {
     if (userIndex >= 0) {
       this.users.splice(userIndex, 1)
     }
+  }
+
+  async getFriendSuggestions({
+    ignoreIdList,
+    latitude,
+    longitude,
+    offset,
+  }: getFriendSuggestionsPayload): Promise<User[]> {
+    const limit = 10
+
+    const filteredUsers = this.users.filter(
+      (user) => !ignoreIdList.includes(user.id),
+    )
+
+    const sortedUsers = filteredUsers.sort((userA, userB) => {
+      const fromCoordinate = { latitude, longitude }
+      const toCoordinate = {
+        latitude: userA.latitude.toNumber(),
+        longitude: userA.longitude.toNumber(),
+      }
+      const distanceA = getDistanceBetweenCoordinates(
+        fromCoordinate,
+        toCoordinate,
+      )
+
+      const toCoordinateB = {
+        latitude: userB.latitude.toNumber(),
+        longitude: userB.longitude.toNumber(),
+      }
+      const distanceB = getDistanceBetweenCoordinates(
+        fromCoordinate,
+        toCoordinateB,
+      )
+
+      return distanceA - distanceB
+    })
+
+    const startIndex = offset
+    const endIndex = startIndex + limit
+    const paginatedUsers = sortedUsers.slice(startIndex, endIndex)
+
+    return paginatedUsers
+  }
+
+  async updateUserById({ data, userId }: updateUserByIdPayload): Promise<User> {
+    const userIndex = this.users.findIndex((user) => user.id === userId)
+
+    if (userIndex === -1) {
+      throw new AppError(usersErrorsConstants.ACCOUNT_NOT_FOUND)
+    }
+
+    const currentUser = this.users[userIndex]
+    const updatedUser: User = {
+      ...currentUser,
+      id: currentUser.id as string,
+    }
+
+    if (data.name !== undefined) {
+      updatedUser.name =
+        typeof data.name === 'string' ? data.name : currentUser.name
+    }
+
+    if (data.nick !== undefined) {
+      updatedUser.nick =
+        typeof data.nick === 'string' ? data.nick : currentUser.nick
+    }
+
+    if (data.description !== undefined) {
+      updatedUser.description =
+        typeof data.description === 'string'
+          ? data.description
+          : currentUser.description
+    }
+
+    this.users[userIndex] = updatedUser
+
+    return updatedUser
+  }
+
+  async findUserByNick(nick: string): Promise<User | null> {
+    return this.users.find((user) => user.nick === nick) || null
+  }
+
+  async updatePassword({
+    password_hash,
+    userId,
+  }: updatePasswordPaylaod): Promise<User> {
+    const userIndex = this.users.findIndex((user) => user.id === userId)
+
+    if (userIndex === -1) {
+      throw new AppError(usersErrorsConstants.ACCOUNT_NOT_FOUND)
+    }
+
+    const currentUser = this.users[userIndex]
+    const updatedUser: User = {
+      ...currentUser,
+      id: currentUser.id as string,
+      password_hash,
+    }
+
+    this.users[userIndex] = updatedUser
+
+    return updatedUser
   }
 }

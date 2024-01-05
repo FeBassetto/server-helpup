@@ -3,8 +3,14 @@ import { ZodError } from 'zod'
 
 import fastifyCookie from '@fastify/cookie'
 import fastifyJwt from '@fastify/jwt'
+import multipart from '@fastify/multipart'
+import fastifyWebsocket, { SocketStream } from '@fastify/websocket'
 
 import { env } from './env'
+import { eventsRoutes } from './http/controllers/events/routes'
+import { friendshipsRoutes } from './http/controllers/friendships/routes'
+import { groupsRoutes } from './http/controllers/groups/routes'
+import { notificationsRoutes } from './http/controllers/notifications/routes'
 import { pingRoutes } from './http/controllers/ping/routes'
 import { usersRoutes } from './http/controllers/users/routes'
 import { AppError } from './shared/errors/AppError'
@@ -22,12 +28,19 @@ app.register(fastifyJwt, {
   },
 })
 
+app.register(fastifyWebsocket)
+app.register(multipart, { attachFieldsToBody: true })
 app.register(fastifyCookie)
+app.decorate('connections', new Map<string, SocketStream>())
 
 app.register(
   async (instance, opts, next) => {
     instance.register(pingRoutes)
     instance.register(usersRoutes, { prefix: '/users' })
+    instance.register(groupsRoutes, { prefix: '/groups' })
+    instance.register(eventsRoutes, { prefix: '/events' })
+    instance.register(friendshipsRoutes, { prefix: '/friendships' })
+    instance.register(notificationsRoutes, { prefix: '/notifications' })
 
     next()
   },
@@ -35,6 +48,10 @@ app.register(
 )
 
 app.setErrorHandler((error, _, reply) => {
+  if (env.NODE_ENV === 'dev') {
+    console.log(JSON.stringify(error))
+  }
+
   if (error instanceof ZodError) {
     return reply
       .status(400)

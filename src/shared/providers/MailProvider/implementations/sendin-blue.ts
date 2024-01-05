@@ -34,7 +34,7 @@ export class SendinBlueProvider implements MailProvider {
 
     await this.client.sendMail({
       to,
-      from: 'HelpUp <noreplay@helpup.com.br>',
+      from: 'HelpUp <noreply@helpup.com.br>',
       subject,
       html,
     })

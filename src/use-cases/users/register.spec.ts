@@ -28,7 +28,7 @@ describe('Register Use Case', () => {
       is_admin: false,
       is_confirmed: true,
       is_deleted: false,
-      latitude: '-23.550520',
+      latitude: '-23.55052',
       longitude: '-46.633308',
       name: 'João da Silva',
       nick: 'joaosilva',
@@ -63,7 +63,7 @@ describe('Register Use Case', () => {
       is_admin: false,
       is_confirmed: true,
       is_deleted: false,
-      latitude: '-23.550520',
+      latitude: '-23.55052',
       longitude: '-46.633308',
       name: 'João da Silva',
       nick: 'joaosilva',
@@ -103,6 +103,6 @@ describe('Register Use Case', () => {
       street: 'Rua Braz de Assis',
     })
 
-    expect(user.latitude).toEqual(expect.any(String))
+    expect(user.password_hash).toEqual(expect.any(String))
   })
 })
