@@ -44,3 +44,8 @@ jobs:
           MAIL_USER: ${{secrets.MAIL_USER}}
           MAIL_PASS: ${{secrets.MAIL_PASS}}
           DELETE_MAIL_URL: '0'
+          S3_ACCESS_KEY: ${{secrets.S3_ACCESS_KEY}}
+          S3_SECRET_ACCESS_KEY: ${{secrets.S3_SECRET_ACCESS_KEY}}
+          S3_REGION: ${{secrets.S3_REGION}}
+          S3_NAME: ${{secrets.S3_NAME}}
+          S3_BASE_URL: ${{secrets.S3_BASE_URL}}
