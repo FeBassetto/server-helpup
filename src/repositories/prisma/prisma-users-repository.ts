@@ -1,5 +1,7 @@
 import { ConfirmationCode, Prisma, User } from '@prisma/client'
 
+import { env } from '@/env'
+
 import {
   FindByEmailAndNickPayload,
   GetConfirmationCodeByMinutesPayload,
@@ -80,7 +82,7 @@ export class PrismaUsersRepository implements UsersRepository {
     offset,
     ignoreIdList,
   }: getFriendSuggestionsPayload): Promise<User[]> {
-    const limit = 10
+    const limit = env.NUMBER_RESULTS
 
     const suggestions = await prisma.$queryRaw<User[]>`
       SELECT * FROM "users"

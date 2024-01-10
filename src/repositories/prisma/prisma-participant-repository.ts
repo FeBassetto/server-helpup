@@ -51,7 +51,7 @@ export class PrismaParticipantRepository implements ParticipantRepository {
         },
       },
       skip: offset,
-      take: env.RESULTS_PARTICIPANTS_NUMBER,
+      take: env.NUMBER_RESULTS,
       orderBy: {
         user: {
           name: orderBy,
@@ -66,7 +66,7 @@ export class PrismaParticipantRepository implements ParticipantRepository {
       where: { group_id: groupId },
     })
 
-    const pageSize = env.RESULTS_PARTICIPANTS_NUMBER
+    const pageSize = env.NUMBER_RESULTS
     const pages = Math.ceil(totalParticipants / pageSize)
 
     return {
@@ -82,7 +82,7 @@ export class PrismaParticipantRepository implements ParticipantRepository {
     orderBy = 'asc',
     query = '',
   }: GetEventParticipantsParams): Promise<GetParticipantsResponse> {
-    console.log(env.RESULTS_PARTICIPANTS_NUMBER)
+    console.log(env.NUMBER_RESULTS)
 
     const participants = await prisma.participant.findMany({
       where: {
@@ -95,7 +95,7 @@ export class PrismaParticipantRepository implements ParticipantRepository {
         },
       },
       skip: offset,
-      take: env.RESULTS_PARTICIPANTS_NUMBER,
+      take: env.NUMBER_RESULTS,
       orderBy: {
         user: {
           name: orderBy,
@@ -110,7 +110,7 @@ export class PrismaParticipantRepository implements ParticipantRepository {
       where: { event_id: eventId },
     })
 
-    const pageSize = env.RESULTS_PARTICIPANTS_NUMBER
+    const pageSize = env.NUMBER_RESULTS
     const pages = Math.ceil(totalParticipants / pageSize)
 
     return {

@@ -111,13 +111,16 @@ enum EventType {
 model Event {
   id String @id @default(uuid())
 
-  title       String    @unique
-  description String
-  street      String
-  number      Int
-  city        String
-  date        DateTime
-  type        EventType
+  title        String    @unique
+  description  String
+  street       String
+  number       Int
+  city         String
+  neighborhood String
+  date         DateTime
+  type         EventType
+  longitude    Decimal
+  latitude     Decimal
 
   created_at DateTime @default(now())
 

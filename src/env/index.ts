@@ -10,6 +10,7 @@ const envSchema = z.object({
   BASE_URL: z.string(),
   CONFIRM_MAIL_URL: z.string(),
   DELETE_MAIL_URL: z.string(),
+  RESET_PASSWORD_MAIL_URL: z.string(),
   LOGO_URL: z.string(),
   MAIL_HOST: z.string(),
   MAIL_PORT: z.coerce.number(),
@@ -20,7 +21,7 @@ const envSchema = z.object({
   S3_REGION: z.string(),
   S3_NAME: z.string(),
   S3_BASE_URL: z.string(),
-  RESULTS_PARTICIPANTS_NUMBER: z.coerce.number().default(6),
+  NUMBER_RESULTS: z.coerce.number().default(6),
 })
 
 const _env = envSchema.safeParse(process.env)
