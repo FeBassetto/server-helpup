@@ -1,14 +1,90 @@
 import { Friendship, Prisma } from '@prisma/client'
 
+import { env } from '@/env'
+
 import {
   FriendshipsRepository,
   FriendshipPayload,
   GetFriendshipPayload,
+  FriendshipWithPagination,
+  FriendshipWithUserDataAndPagination,
 } from '../friendships-repository'
 
 import { prisma } from '@/lib/prisma'
 
 export class PrismaFriendshipRepository implements FriendshipsRepository {
+  async getUserFriendShips(
+    userId: string,
+    offset: number,
+    query: string,
+  ): Promise<FriendshipWithUserDataAndPagination> {
+    const limit = env.NUMBER_RESULTS
+
+    const friendships = await prisma.friendship.findMany({
+      where: {
+        OR: [
+          {
+            senderId: userId,
+            receiver: {
+              OR: [
+                { name: { contains: query, mode: 'insensitive' } },
+                { nick: { contains: query, mode: 'insensitive' } },
+              ],
+            },
+            isAccepted: true,
+          },
+          {
+            receiverId: userId,
+            sender: {
+              OR: [
+                { name: { contains: query, mode: 'insensitive' } },
+                { nick: { contains: query, mode: 'insensitive' } },
+              ],
+            },
+            isAccepted: true,
+          },
+        ],
+      },
+      skip: offset,
+      take: limit,
+      include: {
+        sender: true,
+        receiver: true,
+      },
+    })
+
+    const totalFriendshipCount = await prisma.friendship.count({
+      where: {
+        OR: [
+          {
+            senderId: userId,
+            receiver: {
+              OR: [
+                { name: { contains: query, mode: 'insensitive' } },
+                { nick: { contains: query, mode: 'insensitive' } },
+              ],
+            },
+            isAccepted: true,
+          },
+          {
+            receiverId: userId,
+            sender: {
+              OR: [
+                { name: { contains: query, mode: 'insensitive' } },
+                { nick: { contains: query, mode: 'insensitive' } },
+              ],
+            },
+            isAccepted: true,
+          },
+        ],
+      },
+    })
+
+    const totalPages = Math.ceil(totalFriendshipCount / limit)
+
+    return { friendships, totalPages }
+  }
+
   async createFriendship({
     senderId,
     receiverId,
@@ -62,16 +138,46 @@ export class PrismaFriendshipRepository implements FriendshipsRepository {
     })
   }
 
-  async getFriendshipInvitates(userId: string): Promise<Friendship[]> {
-    return await prisma.friendship.findMany({
+  async getFriendshipInvitates(
+    userId: string,
+    offset: number,
+  ): Promise<FriendshipWithPagination> {
+    const limit = env.NUMBER_RESULTS
+
+    const friendships = await prisma.friendship.findMany({
+      where: { receiverId: userId, isAccepted: null },
+      skip: offset,
+      take: limit,
+    })
+
+    const totalFriendshipCount = await prisma.friendship.count({
       where: { receiverId: userId, isAccepted: null },
     })
+
+    const totalPages = Math.ceil(totalFriendshipCount / limit)
+
+    return { friendships, totalPages }
   }
 
-  async getSendFriendshipInvitates(userId: string): Promise<Friendship[]> {
-    return await prisma.friendship.findMany({
+  async getSendFriendshipInvitates(
+    userId: string,
+    offset: number,
+  ): Promise<FriendshipWithPagination> {
+    const limit = env.NUMBER_RESULTS
+
+    const friendships = await prisma.friendship.findMany({
+      where: { senderId: userId, isAccepted: null },
+      skip: offset,
+      take: limit,
+    })
+
+    const totalFriendshipCount = await prisma.friendship.count({
       where: { senderId: userId, isAccepted: null },
     })
+
+    const totalPages = Math.ceil(totalFriendshipCount / limit)
+
+    return { friendships, totalPages }
   }
 
   async updateFriendshipById(

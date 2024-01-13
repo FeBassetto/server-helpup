@@ -17,7 +17,7 @@ export class ReadNotificationUseCase {
     readAll,
     userId,
   }: ReadNotificationUseCaseRequest) {
-    if (notificationId === null && readAll === null) {
+    if (notificationId === undefined && readAll === undefined) {
       throw new AppError(notificationErrorsConstants.ACTION_NOT_ALLOWED)
     }
 

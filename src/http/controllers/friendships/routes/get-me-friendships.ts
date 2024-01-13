@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-import { makeGetFriendSuggestionsUseCase } from '@/use-cases/friendships/factories/make-get-friend-suggestions'
+import { makeGetMeFriendshipsUseCase } from '@/use-cases/friendships/factories/make-get-me-friendships'
 
-export async function friendSuggestions(
+export async function getMeFriendships(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
@@ -18,13 +18,9 @@ export async function friendSuggestions(
 
   const { offset, query } = getFrienSuggestionsQuerySchema.parse(request.query)
 
-  const getFriendSuggestionsUseCase = makeGetFriendSuggestionsUseCase()
+  const getMeFriendshipsUseCase = makeGetMeFriendshipsUseCase()
 
-  const friendsSuggestions = await getFriendSuggestionsUseCase.execute({
-    offset,
-    userId: sub,
-    query,
-  })
+  const friendships = await getMeFriendshipsUseCase.execute(sub, offset, query)
 
-  reply.status(200).send(friendsSuggestions)
+  reply.send(friendships)
 }

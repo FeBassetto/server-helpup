@@ -20,26 +20,39 @@ export async function otherProfile(
 
   const { userId } = otherProfileParamsSchema.parse(request.params)
 
+  const getFrienSuggestionsQuerySchema = z.object({
+    offset: z.coerce.number({
+      required_error: 'O campo "offset" é obrigatório.',
+    }),
+    query: z.string().optional(),
+  })
+
+  const { offset, query } = getFrienSuggestionsQuerySchema.parse(request.query)
+
   const otherProfileUseCase = makeGetOtherUserProfileUseCase()
   const getFriendFriendshipUseCase = makeGetFriendFriendshipsUseCase()
   const getUserGroups = makeGetUserGroupsUseCase()
   const getUserEvents = makeGetUserEventsUseCase()
 
-  const [user, { friendShips, isFriends }, groups, events] = await Promise.all([
-    otherProfileUseCase.execute({ id: sub, userId }),
-    getFriendFriendshipUseCase.execute({
-      userId: sub,
-      friendId: userId,
-    }),
-    getUserGroups.execute(userId),
-    getUserEvents.execute(userId),
-  ])
+  const [user, { friendShips, isFriends, totalPages }, groups, events] =
+    await Promise.all([
+      otherProfileUseCase.execute({ id: sub, userId }),
+      getFriendFriendshipUseCase.execute({
+        userId: sub,
+        friendId: userId,
+        offset,
+        query,
+      }),
+      getUserGroups.execute(userId),
+      getUserEvents.execute(userId),
+    ])
 
   reply.status(200).send({
     user: {
       data: user,
       friendShips,
       isFriends,
+      totalFriendsPage: totalPages,
       groups,
       events,
     },

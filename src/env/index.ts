@@ -22,6 +22,10 @@ const envSchema = z.object({
   S3_NAME: z.string(),
   S3_BASE_URL: z.string(),
   NUMBER_RESULTS: z.coerce.number().default(6),
+  FRIENDSHIP_REDIRECT_LINK: z.string(),
+  GROUP_REDIRECT_LINK: z.string(),
+  EVENT_REDIRECT_LINK: z.string(),
+  USERS_REDIRECT_LINK: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)

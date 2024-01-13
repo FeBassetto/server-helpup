@@ -1,4 +1,4 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
 import { EventType } from '@prisma/client'
@@ -7,6 +7,7 @@ import { CreateEventPayload } from '@/use-cases/event/create-event'
 import { makeCreateEventUseCase } from '@/use-cases/event/factories/make-create-event'
 
 export async function createEvent(
+  this: FastifyInstance,
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
@@ -72,6 +73,7 @@ export async function createEvent(
     type: type as EventType,
     number,
     neighborhood,
+    app: this,
   }
 
   await createEventUseCase.execute(eventData, sub, groupId)

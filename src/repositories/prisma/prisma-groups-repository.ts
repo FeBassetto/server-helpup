@@ -29,19 +29,33 @@ export class PrismaGroupRepository implements GroupRepository {
       FROM "groups"
       INNER JOIN "users" ON "groups"."admin_id" = "users"."id"
       WHERE "groups"."title" ILIKE ${'%' + title + '%'}
+      AND (
+        6371 * acos(
+          cos(radians(${lat})) * cos(radians("users"."latitude")) * cos(radians("users"."longitude") - radians(${long})) +
+          sin(radians(${lat})) * sin(radians("users"."latitude"))
+        )
+      ) <= 100
       ORDER BY distance ${Prisma.raw(orderByDirection)}
       LIMIT ${numberOfItems}
       OFFSET ${offset}
     `
 
-    const totalGroups = await prisma.group.count({
-      where: {
-        title: {
-          contains: title,
-        },
-      },
-    })
+    const totalGroupsResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count
+      FROM "groups"
+      INNER JOIN "users" ON "groups"."admin_id" = "users"."id"
+      WHERE "groups"."title" ILIKE ${'%' + title + '%'}
+      AND (
+        6371 * acos(
+          cos(radians(${lat})) * cos(radians("users"."latitude")) * cos(radians("users"."longitude") - radians(${long})) +
+          sin(radians(${lat})) * sin(radians("users"."latitude"))
+        )
+      ) <= 100
+    `
 
+    const totalGroups = totalGroupsResult[0]
+      ? Number(totalGroupsResult[0].count)
+      : 0
     const totalPages = Math.ceil(totalGroups / numberOfItems)
 
     return {

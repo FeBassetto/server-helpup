@@ -30,20 +30,34 @@ export class PrismaEventRepository implements EventRepository {
       ) AS distance
       FROM "events"
       WHERE "title" ILIKE ${'%' + title + '%'}
+      AND (
+        6371 * acos(
+          cos(radians(${lat})) * cos(radians("latitude")) * cos(radians("longitude") - radians(${long})) +
+          sin(radians(${lat})) * sin(radians("latitude"))
+        )
+      ) <= 100
       ${Prisma.raw(typeCondition)}
       ORDER BY distance ${Prisma.raw(orderByDirection)}
       LIMIT ${numberOfItems}
       OFFSET ${offset}
     `
 
-    const whereCondition = {
-      title: {
-        contains: title,
-      },
-      ...(type ? { type } : {}),
-    }
+    const totalEventsResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count
+      FROM "events"
+      WHERE "title" ILIKE ${'%' + title + '%'}
+      AND (
+        6371 * acos(
+          cos(radians(${lat})) * cos(radians("latitude")) * cos(radians("longitude") - radians(${long})) +
+          sin(radians(${lat})) * sin(radians("latitude"))
+        )
+      ) <= 100
+      ${typeCondition ? Prisma.raw(typeCondition) : Prisma.raw('')}
+    `
 
-    const totalEvents = await prisma.event.count({ where: whereCondition })
+    const totalEvents = totalEventsResult[0]
+      ? Number(totalEventsResult[0].count)
+      : 0
     const totalPages = Math.ceil(totalEvents / numberOfItems)
 
     return {

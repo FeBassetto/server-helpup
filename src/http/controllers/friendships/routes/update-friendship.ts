@@ -1,9 +1,10 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
 import { makeUpdateFriendshipUseCase } from '@/use-cases/friendships/factories/make-update-friendship-use-case'
 
 export async function updateFriendship(
+  this: FastifyInstance,
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
@@ -24,7 +25,12 @@ export async function updateFriendship(
 
   const updateFriendshipUseCase = makeUpdateFriendshipUseCase()
 
-  await updateFriendshipUseCase.execute({ accept, friendshipId, userId: sub })
+  await updateFriendshipUseCase.execute({
+    accept,
+    friendshipId,
+    userId: sub,
+    app: this,
+  })
 
   return reply.status(200).send()
 }

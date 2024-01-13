@@ -82,8 +82,6 @@ export class PrismaParticipantRepository implements ParticipantRepository {
     orderBy = 'asc',
     query = '',
   }: GetEventParticipantsParams): Promise<GetParticipantsResponse> {
-    console.log(env.NUMBER_RESULTS)
-
     const participants = await prisma.participant.findMany({
       where: {
         event_id: eventId,

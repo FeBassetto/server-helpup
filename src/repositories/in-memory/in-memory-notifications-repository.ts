@@ -20,6 +20,7 @@ export class InMemoryNotificationRepository implements NotificationRepository {
   async createByUserId(
     userId: string,
     type: NotificationType,
+    redirectId: string,
     id?: string,
   ): Promise<void> {
     const newNotification: Notification = {
@@ -28,6 +29,7 @@ export class InMemoryNotificationRepository implements NotificationRepository {
       type,
       read_at: null,
       created_at: new Date(),
+      redirect_id: redirectId,
     }
 
     this.notifications.push(newNotification)
