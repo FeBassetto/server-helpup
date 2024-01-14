@@ -10,16 +10,24 @@ import { FriendshipsRepository } from '@/repositories/friendships-repository'
 import { InMemoryFriendshipRepository } from '@/repositories/in-memory/in-memory-friendships-repository'
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { UsersRepository } from '@/repositories/users-repository'
+import { NotificationRepository } from '@/repositories/notifications-repository'
+import { InMemoryNotificationRepository } from '@/repositories/in-memory/in-memory-notifications-repository'
 
 let usersRepository: UsersRepository
 let friendshipRepository: FriendshipsRepository
+let notificationRepository: NotificationRepository
 let sut: SendFriendshipUseCase
 
 describe('Send friendships', () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository()
     friendshipRepository = new InMemoryFriendshipRepository()
-    sut = new SendFriendshipUseCase(usersRepository, friendshipRepository)
+    notificationRepository = new InMemoryNotificationRepository()
+    sut = new SendFriendshipUseCase(
+      usersRepository,
+      friendshipRepository,
+      notificationRepository,
+    )
   })
 
   it('should be able to send friendship', async () => {
