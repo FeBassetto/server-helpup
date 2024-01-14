@@ -26,6 +26,7 @@ const envSchema = z.object({
   GROUP_REDIRECT_LINK: z.string(),
   EVENT_REDIRECT_LINK: z.string(),
   USERS_REDIRECT_LINK: z.string(),
+  ADMIN_MAIL: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)
