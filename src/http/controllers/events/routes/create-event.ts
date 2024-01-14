@@ -1,11 +1,13 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
 import { EventType } from '@prisma/client'
 
+import { CreateEventPayload } from '@/use-cases/event/create-event'
 import { makeCreateEventUseCase } from '@/use-cases/event/factories/make-create-event'
 
 export async function createEvent(
+  this: FastifyInstance,
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
@@ -41,26 +43,39 @@ export async function createEvent(
       .string()
       .min(4, 'A rua deve ter pelo menos 4 caracteres.')
       .max(100, 'A rua não pode exceder 100 caracteres.'),
+    neighborhood: z
+      .string()
+      .min(4, 'A rua deve ter pelo menos 4 caracteres.')
+      .max(100, 'A rua não pode exceder 100 caracteres.'),
     type: z.enum(eventTypeValues),
     groupId: z.string().optional(),
     number: z.number(),
   })
 
-  const { city, description, title, date, street, type, groupId, number } =
-    createBodySchema.parse(request.body)
-
-  const eventData = {
-    adminId: { connect: { id: sub } },
+  const {
     city,
+    description,
+    title,
     date,
+    street,
+    type,
+    groupId,
+    number,
+    neighborhood,
+  } = createBodySchema.parse(request.body)
+
+  const eventData: CreateEventPayload = {
+    city,
+    date: new Date(date),
     description,
     street,
     title,
     type: type as EventType,
     number,
-    ...(groupId && { groupId: { connect: { id: groupId } } }),
+    neighborhood,
+    app: this,
   }
 
-  await createEventUseCase.execute(eventData, sub)
+  await createEventUseCase.execute(eventData, sub, groupId)
   reply.send()
 }

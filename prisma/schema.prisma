@@ -67,12 +67,15 @@ model Friendship {
 enum NotificationType {
   friendship_invitation
   friendship_accept
+  group_created
 }
 
 model Notification {
   id String @id @default(uuid())
 
   type NotificationType
+
+  redirect_id String
 
   read_at    DateTime?
   created_at DateTime  @default(now())
@@ -111,13 +114,16 @@ enum EventType {
 model Event {
   id String @id @default(uuid())
 
-  title       String    @unique
-  description String
-  street      String
-  number      Int
-  city        String
-  date        DateTime
-  type        EventType
+  title        String    @unique
+  description  String
+  street       String
+  number       Int
+  city         String
+  neighborhood String
+  date         DateTime
+  type         EventType
+  longitude    Decimal
+  latitude     Decimal
 
   created_at DateTime @default(now())
 

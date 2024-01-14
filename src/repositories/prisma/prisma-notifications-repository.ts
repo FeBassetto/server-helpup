@@ -1,6 +1,11 @@
 import { Notification, NotificationType } from '@prisma/client'
 
-import { NotificationRepository } from '../notifications-repository'
+import { env } from '@/env'
+
+import {
+  NotificationRepository,
+  NotificationWithPagination,
+} from '../notifications-repository'
 
 import { prisma } from '@/lib/prisma'
 
@@ -13,26 +18,29 @@ export class PrismaNotificationRepository implements NotificationRepository {
     })
   }
 
+  async createManyByUsersId(
+    usersId: string[],
+    type: NotificationType,
+    redirectId: string,
+  ): Promise<void> {
+    await prisma.notification.createMany({
+      data: usersId.map((usersId) => {
+        return { redirect_id: redirectId, type, user_id: usersId }
+      }),
+    })
+  }
+
   async createByUserId(
     userId: string,
     type: NotificationType,
-    id?: string,
+    redirectId: string,
   ): Promise<void> {
-    const notificationData: {
-      type: NotificationType
-      user_id: string
-      id?: string
-    } = {
-      type,
-      user_id: userId,
-    }
-
-    if (id) {
-      notificationData.id = id
-    }
-
     await prisma.notification.create({
-      data: notificationData,
+      data: {
+        type,
+        user_id: userId,
+        redirect_id: redirectId,
+      },
     })
   }
 
@@ -56,11 +64,57 @@ export class PrismaNotificationRepository implements NotificationRepository {
     })
   }
 
-  async getNotificationsByUserId(userId: string): Promise<Notification[]> {
-    return await prisma.notification.findMany({
+  async getNotificationsByUserId(
+    userId: string,
+    offset: number,
+  ): Promise<NotificationWithPagination> {
+    const numberOfItems = env.NUMBER_RESULTS
+
+    const notifications = await prisma.notification.findMany({
+      where: {
+        user_id: userId,
+      },
+      orderBy: { created_at: 'desc' },
+      skip: offset,
+      take: numberOfItems,
+    })
+
+    const totalNotifications = await prisma.notification.count({
       where: {
         user_id: userId,
       },
     })
+
+    const totalPages = Math.ceil(totalNotifications / numberOfItems)
+
+    return { totalPages, notifications }
+  }
+
+  async getNewNotificationsByUserId(
+    userId: string,
+    offset: number,
+  ): Promise<NotificationWithPagination> {
+    const numberOfItems = env.NUMBER_RESULTS
+
+    const notifications = await prisma.notification.findMany({
+      where: {
+        user_id: userId,
+        read_at: null,
+      },
+      orderBy: { created_at: 'desc' },
+      skip: offset,
+      take: numberOfItems,
+    })
+
+    const totalNotifications = await prisma.notification.count({
+      where: {
+        user_id: userId,
+        read_at: null,
+      },
+    })
+
+    const totalPages = Math.ceil(totalNotifications / numberOfItems)
+
+    return { totalPages, notifications }
   }
 }

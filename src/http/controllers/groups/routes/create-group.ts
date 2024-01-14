@@ -1,9 +1,10 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
 import { makeCreateGroupUseCase } from '@/use-cases/group/factories/make-create-group'
 
 export async function createGroup(
+  this: FastifyInstance,
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
@@ -33,6 +34,7 @@ export async function createGroup(
       title,
     },
     sub,
+    this,
   )
 
   return reply.status(200).send()

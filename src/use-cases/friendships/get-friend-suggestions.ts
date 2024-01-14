@@ -8,6 +8,7 @@ import { AppError } from '@/shared/errors/AppError'
 interface GetFriendSuggestionsUseCaseRequest {
   userId: string
   offset: number
+  query?: string
 }
 
 export class GetFriendSuggestionsUseCase {
@@ -16,7 +17,7 @@ export class GetFriendSuggestionsUseCase {
     private friendshipsRepository: FriendshipsRepository,
   ) {}
 
-  async execute({ offset, userId }: GetFriendSuggestionsUseCaseRequest) {
+  async execute({ offset, userId, query }: GetFriendSuggestionsUseCaseRequest) {
     const user = await this.usersRepository.getUserDataById(userId)
 
     if (!user) {
@@ -39,6 +40,7 @@ export class GetFriendSuggestionsUseCase {
       latitude: Number(user.latitude),
       longitude: Number(user.longitude),
       offset,
+      query,
     })
 
     const sanitizedSuggestions = friendSuggestions.map(

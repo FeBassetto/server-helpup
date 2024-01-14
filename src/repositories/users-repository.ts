@@ -15,6 +15,7 @@ export interface getFriendSuggestionsPayload {
   longitude: number
   offset: number
   ignoreIdList: Array<string>
+  query?: string
 }
 
 export interface updateUserByIdPayload {
@@ -43,6 +44,11 @@ export interface UsersRepository {
   ): Promise<ConfirmationCode[]>
   getFriendSuggestions(data: getFriendSuggestionsPayload): Promise<User[]>
   getUserDataById(id: string): Promise<User | null>
+  getUsersByDistance(
+    latitude: number,
+    longitude: number,
+    kilometers: number,
+  ): Promise<User[]>
 
   updateUserById(data: updateUserByIdPayload): Promise<User>
   updatePassword(data: updatePasswordPaylaod): Promise<User>

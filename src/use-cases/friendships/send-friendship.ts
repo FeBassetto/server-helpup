@@ -1,23 +1,31 @@
+import { FastifyInstance } from 'fastify'
+
+import { env } from '@/env'
+
 import { usersErrorsConstants } from '../users/errors/constants'
 
 import { friendshipErrorsConstants } from './errors/constants'
 
 import { FriendshipsRepository } from '@/repositories/friendships-repository'
+import { NotificationRepository } from '@/repositories/notifications-repository'
 import { UsersRepository } from '@/repositories/users-repository'
 import { AppError } from '@/shared/errors/AppError'
+import { sendNotificationsUtils } from '@/utils/send-notificaitons'
 
 export interface SendFriendshipUseCaseRequest {
   senderId: string
   receiverId: string
+  app: FastifyInstance
 }
 
 export class SendFriendshipUseCase {
   constructor(
     private usersRepository: UsersRepository,
     private friendshipsRepository: FriendshipsRepository,
+    private notificationRepository: NotificationRepository,
   ) {}
 
-  async execute({ senderId, receiverId }: SendFriendshipUseCaseRequest) {
+  async execute({ senderId, receiverId, app }: SendFriendshipUseCaseRequest) {
     if (senderId === receiverId) {
       throw new AppError(friendshipErrorsConstants.ACTION_NOT_ALLOWED)
     }
@@ -68,11 +76,21 @@ export class SendFriendshipUseCase {
       await this.friendshipsRepository.deleteFriendshipById(existsFriendship.id)
     }
 
-    await this.friendshipsRepository.createFriendship({
+    const friendShip = await this.friendshipsRepository.createFriendship({
       senderId,
       receiverId,
       receiverName: receiverUser.name,
       senderName: senderUser.name,
+    })
+
+    sendNotificationsUtils({
+      app,
+      message: 'Enviou um pedido de amizade',
+      title: `${senderUser.name}`,
+      notificationRepository: this.notificationRepository,
+      userIds: [receiverUser?.id],
+      redirectId: `${env.FRIENDSHIP_REDIRECT_LINK}/${friendShip.id}`,
+      type: 'friendship_invitation',
     })
   }
 }

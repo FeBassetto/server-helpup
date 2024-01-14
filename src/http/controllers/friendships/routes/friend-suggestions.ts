@@ -10,18 +10,20 @@ export async function friendSuggestions(
   const { sub } = request.user
 
   const getFrienSuggestionsQuerySchema = z.object({
-    offset: z.string({
+    offset: z.coerce.number({
       required_error: 'O campo "offset" é obrigatório.',
     }),
+    query: z.string().optional(),
   })
 
-  const { offset } = getFrienSuggestionsQuerySchema.parse(request.query)
+  const { offset, query } = getFrienSuggestionsQuerySchema.parse(request.query)
 
   const getFriendSuggestionsUseCase = makeGetFriendSuggestionsUseCase()
 
   const friendsSuggestions = await getFriendSuggestionsUseCase.execute({
-    offset: Number(offset),
+    offset,
     userId: sub,
+    query,
   })
 
   reply.status(200).send(friendsSuggestions)

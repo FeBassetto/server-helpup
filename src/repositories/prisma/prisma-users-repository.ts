@@ -1,5 +1,7 @@
 import { ConfirmationCode, Prisma, User } from '@prisma/client'
 
+import { env } from '@/env'
+
 import {
   FindByEmailAndNickPayload,
   GetConfirmationCodeByMinutesPayload,
@@ -74,23 +76,63 @@ export class PrismaUsersRepository implements UsersRepository {
     return confirmationCode
   }
 
+  async getUsersByDistance(
+    latitude: number,
+    longitude: number,
+    kilometers: number,
+  ): Promise<User[]> {
+    const earthRadiusInMeters = 6371
+
+    return await prisma.$queryRaw<User[]>`
+      SELECT * from users
+      WHERE (
+        ${earthRadiusInMeters} * acos(
+          cos(radians(${latitude})) *
+          cos(radians(latitude)) *
+          cos(radians(longitude) - radians(${longitude})) +
+          sin(radians(${latitude})) *
+          sin(radians(latitude))
+        )
+      ) <= ${kilometers}
+      ORDER BY (
+        ${earthRadiusInMeters} * acos(
+          cos(radians(${latitude})) *
+          cos(radians(latitude)) *
+          cos(radians(longitude) - radians(${longitude})) +
+          sin(radians(${latitude})) *
+          sin(radians(latitude))
+        )
+      )
+    `
+  }
+
   async getFriendSuggestions({
     latitude,
     longitude,
     offset,
     ignoreIdList,
+    query,
   }: getFriendSuggestionsPayload): Promise<User[]> {
-    const limit = 10
+    const limit = env.NUMBER_RESULTS
+
+    let nameFilter = ''
+    let nickFilter = ''
+    if (query) {
+      nameFilter = `AND "name" ILIKE '%${query}%'`
+      nickFilter = `OR "nick" ILIKE '%${query}%'`
+    }
 
     const suggestions = await prisma.$queryRaw<User[]>`
       SELECT * FROM "users"
       WHERE "id" NOT IN (${Prisma.join(ignoreIdList)})
+      ${Prisma.raw(nameFilter)}
+      ${Prisma.raw(nickFilter)}
       AND (
-      6371 * acos(
-        cos(radians(${latitude})) * cos(radians("latitude")) * cos(radians("longitude") - radians(${longitude})) +
-        sin(radians(${latitude})) * sin(radians("latitude"))
-      )
-    ) <= 100 
+        6371 * acos(
+          cos(radians(${latitude})) * cos(radians("latitude")) * cos(radians("longitude") - radians(${longitude})) +
+          sin(radians(${latitude})) * sin(radians("latitude"))
+        )
+      ) <= 100 
       ORDER BY (
         6371 * acos(
           cos(radians(${latitude})) * cos(radians("latitude")) * cos(radians("longitude") - radians(${longitude})) +
