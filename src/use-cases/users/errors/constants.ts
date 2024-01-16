@@ -100,7 +100,13 @@ export const usersErrorsConstants = {
   UNAUTHORIZED: {
     type: 'UNAUTHORIZED',
     code: 401,
-    message: 'Unauthorized',
+    message:
+      'Você não tem autorização para executar esta função. Tente novamente!',
+  },
+  EXPIRED_TOKEN: {
+    type: 'EXPIRED_TOKEN',
+    code: 401,
+    message: 'Seu token expirou. Tente novamente com outro token!',
   },
 } as const
 

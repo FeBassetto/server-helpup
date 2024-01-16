@@ -12,7 +12,7 @@ export async function verifyConfirmMail(request: FastifyRequest) {
     await request.jwtVerify()
   } catch (error) {
     console.error(error)
-    throw new AppError(usersErrorsConstants.UNAUTHORIZED)
+    throw new AppError(usersErrorsConstants.EXPIRED_TOKEN)
   }
 
   if (!request.user.isConfirmMail) {

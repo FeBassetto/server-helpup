@@ -13,7 +13,7 @@ export class SendConfirmationUseCase {
 
   async execute({ email, token }: SendConfirmationUseCaseRequest) {
     const props = {
-      link: `${env.BASE_URL}/${env.CONFIRM_MAIL_URL}/${token}`,
+      link: `${env.BASE_URL}/${env.CONFIRM_MAIL_URL}?token=${token}&email=${email}`,
       siteurl: `${env.BASE_URL}`,
       logo: `${env.LOGO_URL}`,
     }

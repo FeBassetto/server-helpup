@@ -11,6 +11,6 @@ export async function verifyJWT(request: FastifyRequest) {
   try {
     await request.jwtVerify()
   } catch (error) {
-    throw new AppError(usersErrorsConstants.UNAUTHORIZED)
+    throw new AppError(usersErrorsConstants.EXPIRED_TOKEN)
   }
 }

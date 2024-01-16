@@ -39,7 +39,7 @@ export class SendResetPasswordMailUseCase {
     }
 
     const props = {
-      link: `${env.BASE_URL}/${env.RESET_PASSWORD_MAIL_URL}/${token}`,
+      link: `${env.BASE_URL}/${env.RESET_PASSWORD_MAIL_URL}?token=${token}`,
       siteurl: `${env.BASE_URL}`,
       logo: `${env.LOGO_URL}`,
     }

@@ -31,7 +31,7 @@ export class SendDeleteMailUseCase {
     }
 
     const props = {
-      link: `${env.BASE_URL}/${env.DELETE_MAIL_URL}/${token}?deleteData=${deleteData}`,
+      link: `${env.BASE_URL}/${env.DELETE_MAIL_URL}?token=${token}&deleteData=${deleteData}`,
       siteurl: `${env.BASE_URL}`,
       logo: `${env.LOGO_URL}`,
     }
