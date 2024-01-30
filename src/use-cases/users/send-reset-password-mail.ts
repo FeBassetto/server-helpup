@@ -34,6 +34,10 @@ export class SendResetPasswordMailUseCase {
       throw new AppError(usersErrorsConstants.ADMIN_NOT_ALLOWED_ACTION)
     }
 
+    if (!user.is_confirmed) {
+      throw new AppError(usersErrorsConstants.UNCONFIRMED_EMAIL)
+    }
+
     if (!token) {
       return user
     }

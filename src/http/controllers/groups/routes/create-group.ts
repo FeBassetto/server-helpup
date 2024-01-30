@@ -19,19 +19,18 @@ export async function createGroup(
       .string()
       .min(4, 'A descrição deve ter pelo menos 4 caracteres.')
       .max(100, 'A descrição não pode exceder 100 caracteres.'),
-    city: z.string(),
   })
 
-  const { city, description, title } = createBodySchema.parse(request.body)
+  const { description, title } = createBodySchema.parse(request.body)
 
   const createGroupUseCase = makeCreateGroupUseCase()
 
   await createGroupUseCase.execute(
     {
       adminId: { connect: { id: sub } },
-      city,
       description,
       title,
+      city: '',
     },
     sub,
     this,

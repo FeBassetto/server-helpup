@@ -2,7 +2,7 @@ export const usersErrorsConstants = {
   UNCONFIRMED_EMAIL: {
     type: 'UNCONFIRMED_EMAIL',
     code: 403,
-    message: 'Por favor, confirme seu e-mail para acessar sua conta.',
+    message: 'Por favor, confirme seu e-mail primeiramente antes de continuar.',
   },
   UPDATE_GEO_MISSED_PARAMS: {
     type: 'UPDATE_GEO_MISSED_PARAMS',

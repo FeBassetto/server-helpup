@@ -32,7 +32,7 @@ export async function usersRoutes(app: FastifyInstance) {
 
   app.patch('/', { onRequest: verifyValidUser }, update)
   app.patch('/password', { onRequest: verifyValidUser }, updatePassword)
-  app.patch('/token/refresh', refresh)
+  app.patch('/token/refresh', { onRequest: verifyValidUser }, refresh)
 
   app.delete('/', { onRequest: [verifyDeleteMail] }, deleteRoute)
 }

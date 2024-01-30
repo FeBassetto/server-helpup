@@ -6,6 +6,7 @@ import { getGroup } from './routes/get-group'
 import { getGroups } from './routes/get-groups'
 import { getMeGroups } from './routes/get-me-groups'
 import { joinGroup } from './routes/join-group'
+import { unjoinGroup } from './routes/unjoin-group'
 import { updateGroup } from './routes/update-group'
 
 import { verifyValidUser } from '@/http/middlewares/verify-valid-user'
@@ -13,6 +14,7 @@ import { verifyValidUser } from '@/http/middlewares/verify-valid-user'
 export async function groupsRoutes(app: FastifyInstance) {
   app.post('/', { onRequest: [verifyValidUser] }, createGroup)
   app.post('/join/:groupId', { onRequest: [verifyValidUser] }, joinGroup)
+  app.post('/unjoin/:groupId', { onRequest: [verifyValidUser] }, unjoinGroup)
 
   app.get('/', { onRequest: [verifyValidUser] }, getGroups)
   app.get('/me', { onRequest: [verifyValidUser] }, getMeGroups)

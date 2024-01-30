@@ -22,34 +22,33 @@ export class PrismaEventRepository implements EventRepository {
     const typeCondition = type ? `AND "type" = ${type}` : ''
 
     const events = await prisma.$queryRaw<Event[]>`
-      SELECT *, (
+      SELECT "events".*, (
         6371 * acos(
-          cos(radians(${lat})) * cos(radians("latitude")) * cos(radians("longitude") - radians(${long})) +
-          sin(radians(${lat})) * sin(radians("latitude"))
+          cos(radians(${lat})) * cos(radians("events"."latitude")) * cos(radians("events"."longitude") - radians(${long})) +
+          sin(radians(${lat})) * sin(radians("events"."latitude"))
         )
       ) AS distance
       FROM "events"
-      WHERE "title" ILIKE ${'%' + title + '%'}
+      WHERE "events"."title" ILIKE ${'%' + title + '%'}
       AND (
         6371 * acos(
-          cos(radians(${lat})) * cos(radians("latitude")) * cos(radians("longitude") - radians(${long})) +
-          sin(radians(${lat})) * sin(radians("latitude"))
+          cos(radians(${lat})) * cos(radians("events"."latitude")) * cos(radians("events"."longitude") - radians(${long})) +
+          sin(radians(${lat})) * sin(radians("events"."latitude"))
         )
       ) <= 100
       ${Prisma.raw(typeCondition)}
       ORDER BY distance ${Prisma.raw(orderByDirection)}
-      LIMIT ${numberOfItems}
-      OFFSET ${offset}
+      LIMIT ${numberOfItems} OFFSET ${offset * numberOfItems}
     `
 
     const totalEventsResult = await prisma.$queryRaw<{ count: bigint }[]>`
       SELECT COUNT(*) as count
       FROM "events"
-      WHERE "title" ILIKE ${'%' + title + '%'}
+      WHERE "events"."title" ILIKE ${'%' + title + '%'}
       AND (
         6371 * acos(
-          cos(radians(${lat})) * cos(radians("latitude")) * cos(radians("longitude") - radians(${long})) +
-          sin(radians(${lat})) * sin(radians("latitude"))
+          cos(radians(${lat})) * cos(radians("events"."latitude")) * cos(radians("events"."longitude") - radians(${long})) +
+          sin(radians(${lat})) * sin(radians("events"."latitude"))
         )
       ) <= 100
       ${typeCondition ? Prisma.raw(typeCondition) : Prisma.raw('')}
@@ -79,8 +78,39 @@ export class PrismaEventRepository implements EventRepository {
     return await prisma.event.findUnique({ where: { id: eventId } })
   }
 
-  async getEventsByUserId(userId: string): Promise<Event[]> {
-    return await prisma.event.findMany({ where: { admin_id: userId } })
+  async getEventsByUserId(
+    userId: string,
+    offset: number,
+    query: string,
+  ): Promise<{ events: Event[]; totalPages: number }> {
+    const take = env.NUMBER_RESULTS
+    const skip = offset * take
+
+    const events = await prisma.event.findMany({
+      where: {
+        admin_id: userId,
+        title: {
+          contains: query,
+          mode: 'insensitive',
+        },
+      },
+      take,
+      skip,
+    })
+
+    const totalCount = await prisma.event.count({
+      where: {
+        admin_id: userId,
+        title: {
+          contains: query,
+          mode: 'insensitive',
+        },
+      },
+    })
+
+    const totalPages = Math.ceil(totalCount / take)
+
+    return { events, totalPages }
   }
 
   async getEventsByGroupId(groupId: string): Promise<Event[]> {

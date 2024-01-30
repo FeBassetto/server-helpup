@@ -21,7 +21,11 @@ export interface GroupRepository {
   create(data: Prisma.GroupCreateInput): Promise<Group>
 
   getById(groupId: string): Promise<Group | null>
-  getGroupsByUserId(userId: string): Promise<Group[]>
+  getGroupsByUserId(
+    userId: string,
+    offset?: number,
+    query?: string,
+  ): Promise<{ groups: Group[]; totalPages: number }>
   getByTitle(title: string): Promise<Group | null>
 
   getGroupsByDistanceAndQuery(

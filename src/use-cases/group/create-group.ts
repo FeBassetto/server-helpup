@@ -40,11 +40,15 @@ export class CreateGroupUseCase {
       throw new AppError(usersErrorsConstants.ACTION_NOT_ALLOWED)
     }
 
+    data.city = user.city
+
     const notificationUsers = await this.usersRepository.getUsersByDistance(
       Number(user.latitude),
       Number(user.longitude),
       100,
     )
+
+    const group = await this.groupRepository.create(data)
 
     const userIds = notificationUsers
       .map((user) => {
@@ -56,7 +60,6 @@ export class CreateGroupUseCase {
       })
       .filter((id) => id !== 'null')
 
-    const group = await this.groupRepository.create(data)
     await this.participantRepository.register({
       user: { connect: { id: userId } },
       group: { connect: { id: group.id } },

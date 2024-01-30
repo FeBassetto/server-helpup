@@ -24,7 +24,11 @@ export interface EventRepository {
 
   getEvent(eventId: string): Promise<Event | null>
   getEventByTitle(title: string): Promise<Event | null>
-  getEventsByUserId(userId: string): Promise<Event[]>
+  getEventsByUserId(
+    userId: string,
+    offset: number,
+    query: string,
+  ): Promise<{ events: Event[]; totalPages: number }>
   getEventsByGroupId(groupId: string): Promise<Event[]>
 
   getEventsByDistanceAndQuery(
