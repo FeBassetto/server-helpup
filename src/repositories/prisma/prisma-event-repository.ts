@@ -19,7 +19,9 @@ export class PrismaEventRepository implements EventRepository {
     const numberOfItems = env.NUMBER_RESULTS
     const orderByDirection = orderBy === 'desc' ? 'DESC' : 'ASC'
 
-    const typeCondition = type ? `AND "type" = ${type}` : ''
+    const typeCondition = type
+      ? Prisma.sql`AND "type" = ${Prisma.raw(`'${type}'::"EventType"`)}`
+      : Prisma.empty
 
     const events = await prisma.$queryRaw<Event[]>`
       SELECT "events".*, (
@@ -36,7 +38,7 @@ export class PrismaEventRepository implements EventRepository {
           sin(radians(${lat})) * sin(radians("events"."latitude"))
         )
       ) <= 100
-      ${Prisma.raw(typeCondition)}
+      ${typeCondition}
       ORDER BY distance ${Prisma.raw(orderByDirection)}
       LIMIT ${numberOfItems} OFFSET ${offset * numberOfItems}
     `
@@ -51,7 +53,7 @@ export class PrismaEventRepository implements EventRepository {
           sin(radians(${lat})) * sin(radians("events"."latitude"))
         )
       ) <= 100
-      ${typeCondition ? Prisma.raw(typeCondition) : Prisma.raw('')}
+      ${typeCondition}
     `
 
     const totalEvents = totalEventsResult[0]
