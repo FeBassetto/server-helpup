@@ -112,7 +112,10 @@ export class PrismaUsersRepository implements UsersRepository {
     offset,
     ignoreIdList,
     query,
-  }: getFriendSuggestionsPayload): Promise<User[]> {
+  }: getFriendSuggestionsPayload): Promise<{
+    users: User[]
+    totalPages: number
+  }> {
     const limit = env.NUMBER_RESULTS
 
     let nameFilter = ''
@@ -143,7 +146,29 @@ export class PrismaUsersRepository implements UsersRepository {
       LIMIT ${limit}
     `
 
-    return suggestions
+    const totalUsersResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count
+      FROM "users"
+      WHERE "id" NOT IN (${Prisma.join(ignoreIdList)})
+      ${Prisma.raw(nameFilter)}
+      ${Prisma.raw(nickFilter)}
+      AND (
+        6371 * acos(
+          cos(radians(${latitude})) * cos(radians("latitude")) * cos(radians("longitude") - radians(${longitude})) +
+          sin(radians(${latitude})) * sin(radians("latitude"))
+        )
+      ) <= 100
+    `
+
+    const totalUsers = totalUsersResult[0]
+      ? Number(totalUsersResult[0].count)
+      : 0
+    const totalPages = Math.ceil(totalUsers / limit)
+
+    return {
+      users: suggestions,
+      totalPages,
+    }
   }
 
   async getUserDataById(id: string): Promise<User | null> {

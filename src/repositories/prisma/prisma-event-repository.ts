@@ -29,7 +29,7 @@ export class PrismaEventRepository implements EventRepository {
           cos(radians(${lat})) * cos(radians("events"."latitude")) * cos(radians("events"."longitude") - radians(${long})) +
           sin(radians(${lat})) * sin(radians("events"."latitude"))
         )
-      ) AS distance
+      ) AS "distance"
       FROM "events"
       WHERE "events"."title" ILIKE ${'%' + title + '%'}
       AND (

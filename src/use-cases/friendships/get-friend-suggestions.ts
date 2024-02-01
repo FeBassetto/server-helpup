@@ -43,7 +43,7 @@ export class GetFriendSuggestionsUseCase {
       query,
     })
 
-    const sanitizedSuggestions = friendSuggestions.map(
+    const sanitizedSuggestions = friendSuggestions.users.map(
       ({
         password_hash,
         latitude,
@@ -57,6 +57,9 @@ export class GetFriendSuggestionsUseCase {
       }) => rest,
     )
 
-    return sanitizedSuggestions
+    return {
+      friends: sanitizedSuggestions,
+      totalPages: friendSuggestions.totalPages,
+    }
   }
 }

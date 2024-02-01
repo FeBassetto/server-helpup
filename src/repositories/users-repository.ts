@@ -42,7 +42,9 @@ export interface UsersRepository {
   getConfirmationCodeByMinutes(
     data: GetConfirmationCodeByMinutesPayload,
   ): Promise<ConfirmationCode[]>
-  getFriendSuggestions(data: getFriendSuggestionsPayload): Promise<User[]>
+  getFriendSuggestions(
+    data: getFriendSuggestionsPayload,
+  ): Promise<{ users: User[]; totalPages: number }>
   getUserDataById(id: string): Promise<User | null>
   getUsersByDistance(
     latitude: number,

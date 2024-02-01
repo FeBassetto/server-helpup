@@ -2,6 +2,8 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
 import { makeGetEventUseCase } from '@/use-cases/event/factories/make-get-event'
+import { makeGetUserProfileUseCase } from '@/use-cases/users/factories/make-get-user-profile-use-case'
+import { getDistanceBetweenCoordinates } from '@/utils/get-distance-between-coordenates'
 
 export async function getEvent(request: FastifyRequest, reply: FastifyReply) {
   const { sub } = request.user
@@ -20,6 +22,9 @@ export async function getEvent(request: FastifyRequest, reply: FastifyReply) {
   const { offset, orderBy, query } = getEventQuerySchema.parse(request.query)
 
   const getEventUseCase = makeGetEventUseCase()
+  const getUserDataUseCase = makeGetUserProfileUseCase()
+
+  const { latitude, longitude } = await getUserDataUseCase.execute(sub)
 
   const {
     event,
@@ -30,6 +35,11 @@ export async function getEvent(request: FastifyRequest, reply: FastifyReply) {
     orderBy,
     query,
   })
+
+  const distance = getDistanceBetweenCoordinates(
+    { latitude: Number(latitude), longitude: Number(longitude) },
+    { latitude: Number(event.latitude), longitude: Number(event.longitude) },
+  )
 
   const modifiedParticipants = participants.map((participant) => {
     const user = participant.user
@@ -45,7 +55,10 @@ export async function getEvent(request: FastifyRequest, reply: FastifyReply) {
   const isUser = participants.some((participant) => participant.user_id === sub)
 
   reply.send({
-    event,
+    event: {
+      ...event,
+      distance,
+    },
     participants_data: {
       pages,
       participants: modifiedParticipants,

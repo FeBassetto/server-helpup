@@ -16,8 +16,8 @@ export async function profile(request: FastifyRequest, reply: FastifyReply) {
   const [user, friendShips, groups, events] = await Promise.all([
     getDataUseCase.execute(sub),
     getProfileFriendships.execute(sub),
-    getUserGroups.execute(sub),
-    getUserEvents.execute(sub),
+    getUserGroups.execute(sub, 0, ''),
+    getUserEvents.execute(sub, 0, ''),
   ])
 
   return reply.status(200).send({

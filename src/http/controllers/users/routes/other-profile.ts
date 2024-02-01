@@ -43,8 +43,8 @@ export async function otherProfile(
         offset,
         query,
       }),
-      getUserGroups.execute(userId),
-      getUserEvents.execute(userId),
+      getUserGroups.execute(userId, 0, ''),
+      getUserEvents.execute(userId, 0, ''),
     ])
 
   reply.status(200).send({
