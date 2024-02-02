@@ -48,10 +48,25 @@ export class GetFriendFriendshipsUseCase {
       })
       .map(({ isAccepted, created_at, ...rest }) => rest)
 
+    let isFriendsStatus
+
+    if (!isFriends) {
+      isFriendsStatus = false
+    } else if (isFriends.isAccepted === null) {
+      if (isFriends.senderId === userId) {
+        isFriendsStatus = 'pending'
+      } else if (isFriends.receiverId === userId) {
+        isFriendsStatus = 'pending-accept'
+      }
+    } else {
+      isFriendsStatus = isFriends.isAccepted ? true : 'reject'
+    }
+
     return {
       friendShips: friendFriendShipListFiltered,
-      isFriends: isFriends?.isAccepted === null ? false : isFriends?.isAccepted,
+      isFriends: isFriendsStatus,
       totalPages: friendFriendShipList.totalPages,
+      friendShipId: isFriends?.id,
     }
   }
 }

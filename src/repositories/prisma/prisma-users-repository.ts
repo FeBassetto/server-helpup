@@ -128,6 +128,7 @@ export class PrismaUsersRepository implements UsersRepository {
     const suggestions = await prisma.$queryRaw<User[]>`
       SELECT * FROM "users"
       WHERE "id" NOT IN (${Prisma.join(ignoreIdList)})
+      AND "is_confirmed" = true
       ${Prisma.raw(nameFilter)}
       ${Prisma.raw(nickFilter)}
       AND (
@@ -150,6 +151,7 @@ export class PrismaUsersRepository implements UsersRepository {
       SELECT COUNT(*) as count
       FROM "users"
       WHERE "id" NOT IN (${Prisma.join(ignoreIdList)})
+      AND "is_confirmed" = true
       ${Prisma.raw(nameFilter)}
       ${Prisma.raw(nickFilter)}
       AND (
@@ -180,6 +182,15 @@ export class PrismaUsersRepository implements UsersRepository {
   }
 
   async deleteUserDataById(id: string): Promise<void> {
+    await prisma.confirmationCode.deleteMany({ where: { user_id: id } })
+    await prisma.friendship.deleteMany({
+      where: { OR: [{ senderId: id }, { receiverId: id }] },
+    })
+    await prisma.notification.deleteMany({ where: { user_id: id } })
+    await prisma.participant.deleteMany({ where: { user_id: id } })
+    await prisma.group.deleteMany({ where: { admin_id: id } })
+    await prisma.event.deleteMany({ where: { admin_id: id } })
+
     await prisma.user.delete({ where: { id } })
   }
 

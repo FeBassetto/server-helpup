@@ -66,7 +66,6 @@ export class PrismaNotificationRepository implements NotificationRepository {
 
   async getNotificationsByUserId(
     userId: string,
-    offset: number,
   ): Promise<NotificationWithPagination> {
     const numberOfItems = env.NUMBER_RESULTS
 
@@ -75,8 +74,6 @@ export class PrismaNotificationRepository implements NotificationRepository {
         user_id: userId,
       },
       orderBy: { created_at: 'desc' },
-      skip: offset,
-      take: numberOfItems,
     })
 
     const totalNotifications = await prisma.notification.count({
@@ -92,7 +89,6 @@ export class PrismaNotificationRepository implements NotificationRepository {
 
   async getNewNotificationsByUserId(
     userId: string,
-    offset: number,
   ): Promise<NotificationWithPagination> {
     const numberOfItems = env.NUMBER_RESULTS
 
@@ -102,8 +98,6 @@ export class PrismaNotificationRepository implements NotificationRepository {
         read_at: null,
       },
       orderBy: { created_at: 'desc' },
-      skip: offset,
-      take: numberOfItems,
     })
 
     const totalNotifications = await prisma.notification.count({

@@ -10,11 +10,10 @@ export async function getNotifications(
   const { sub } = request.user
 
   const getNotificationsQuerySchema = z.object({
-    offset: z.coerce.number(),
     onlyNew: z.enum(['false', 'true']),
   })
 
-  const { offset, onlyNew } = getNotificationsQuerySchema.parse(request.query)
+  const { onlyNew } = getNotificationsQuerySchema.parse(request.query)
 
   const isOnlyNew = onlyNew === 'true'
 
@@ -22,7 +21,6 @@ export async function getNotifications(
 
   const { notifications, totalPages } = await getNotificationsUseCase.execute(
     sub,
-    offset,
     isOnlyNew,
   )
 

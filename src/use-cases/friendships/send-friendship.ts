@@ -1,7 +1,5 @@
 import { FastifyInstance } from 'fastify'
 
-import { env } from '@/env'
-
 import { usersErrorsConstants } from '../users/errors/constants'
 
 import { friendshipErrorsConstants } from './errors/constants'
@@ -89,7 +87,7 @@ export class SendFriendshipUseCase {
       title: `${senderUser.name}`,
       notificationRepository: this.notificationRepository,
       userIds: [receiverUser?.id],
-      redirectId: `${env.FRIENDSHIP_REDIRECT_LINK}/${friendShip.id}`,
+      redirectId: friendShip.senderId,
       type: 'friendship_invitation',
     })
   }

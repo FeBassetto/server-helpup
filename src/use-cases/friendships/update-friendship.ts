@@ -1,7 +1,5 @@
 import { FastifyInstance } from 'fastify'
 
-import { env } from '@/env'
-
 import { friendshipErrorsConstants } from './errors/constants'
 
 import { FriendshipsRepository } from '@/repositories/friendships-repository'
@@ -65,8 +63,8 @@ export class UpdateFriendshipUseCase {
         title: `${existsFriendShip.receiverName}`,
         message: 'Solicitação de amizade aceita',
         notificationRepository: this.notificationRepository,
-        redirectId: `${env.USERS_REDIRECT_LINK}/${existsFriendShip.receiverId}`,
-        type: 'group_created',
+        redirectId: existsFriendShip.receiverId,
+        type: 'friendship_accept',
         userIds: [existsFriendShip.senderId],
       })
     }

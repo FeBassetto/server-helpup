@@ -140,14 +140,11 @@ export class PrismaFriendshipRepository implements FriendshipsRepository {
 
   async getFriendshipInvitates(
     userId: string,
-    offset: number,
   ): Promise<FriendshipWithPagination> {
     const limit = env.NUMBER_RESULTS
 
     const friendships = await prisma.friendship.findMany({
       where: { receiverId: userId, isAccepted: null },
-      skip: offset,
-      take: limit,
     })
 
     const totalFriendshipCount = await prisma.friendship.count({
@@ -161,14 +158,11 @@ export class PrismaFriendshipRepository implements FriendshipsRepository {
 
   async getSendFriendshipInvitates(
     userId: string,
-    offset: number,
   ): Promise<FriendshipWithPagination> {
     const limit = env.NUMBER_RESULTS
 
     const friendships = await prisma.friendship.findMany({
       where: { senderId: userId, isAccepted: null },
-      skip: offset,
-      take: limit,
     })
 
     const totalFriendshipCount = await prisma.friendship.count({

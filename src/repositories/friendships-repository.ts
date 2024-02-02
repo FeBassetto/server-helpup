@@ -38,14 +38,8 @@ export interface FriendshipsRepository {
   ): Promise<FriendshipWithUserDataAndPagination>
   getAllUserFriendships(userId: string): Promise<Friendship[]>
   getAllUserFriendshipsRequest(userId: string): Promise<Friendship[]>
-  getFriendshipInvitates(
-    userId: string,
-    offset: number,
-  ): Promise<FriendshipWithPagination>
-  getSendFriendshipInvitates(
-    userId: string,
-    offset: number,
-  ): Promise<FriendshipWithPagination>
+  getFriendshipInvitates(userId: string): Promise<FriendshipWithPagination>
+  getSendFriendshipInvitates(userId: string): Promise<FriendshipWithPagination>
   updateFriendshipById(
     data: Prisma.FriendshipUpdateInput,
     friendShipId: string,

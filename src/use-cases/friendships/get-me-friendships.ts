@@ -13,8 +13,8 @@ export class GetMeFriendshipsUseCase {
     const friends = friendships.friendships.map((friendship) => {
       const friend =
         friendship.senderId === userId ? friendship.receiver : friendship.sender
-      const { name, nick, id } = friend
-      return { name, nick, id }
+      const { name, nick, id, profile_url } = friend
+      return { name, nick, id, profile_url }
     })
 
     return { friends, totalPages: friendships.totalPages }

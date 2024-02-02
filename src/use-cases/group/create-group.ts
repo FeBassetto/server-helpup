@@ -2,8 +2,6 @@ import { FastifyInstance } from 'fastify'
 
 import { Prisma } from '@prisma/client'
 
-import { env } from '@/env'
-
 import { usersErrorsConstants } from '../users/errors/constants'
 
 import { groupErrorsConstants } from './errors/constants'
@@ -70,7 +68,7 @@ export class CreateGroupUseCase {
       title: `${data.title}`,
       message: 'Grupo criado na sua região',
       notificationRepository: this.notificationRepository,
-      redirectId: `${env.GROUP_REDIRECT_LINK}/${group.id}`,
+      redirectId: group.id,
       type: 'group_created',
       userIds,
     })

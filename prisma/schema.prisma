@@ -13,7 +13,7 @@ model User {
   name          String
   nick          String   @unique
   description   String
-  profile_url   String   @default("users/default.jpg")
+  profile_url   String   @default("users/default.png")
   email         String   @unique
   password_hash String
   city          String
@@ -68,6 +68,7 @@ enum NotificationType {
   friendship_invitation
   friendship_accept
   group_created
+  event_created
 }
 
 model Notification {

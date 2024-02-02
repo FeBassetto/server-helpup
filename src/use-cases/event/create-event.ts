@@ -2,8 +2,6 @@ import { FastifyInstance } from 'fastify'
 
 import { EventType } from '@prisma/client'
 
-import { env } from '@/env'
-
 import { usersErrorsConstants } from '../users/errors/constants'
 
 import { eventErrorsConstants } from './errors/constants'
@@ -111,10 +109,10 @@ export class CreateEventUseCase {
     sendNotificationsUtils({
       app,
       title: `${event.title}`,
-      message: 'Grupo criado na sua região',
+      message: 'Evento criado na sua região',
       notificationRepository: this.notificationRepository,
-      redirectId: `${env.EVENT_REDIRECT_LINK}/${event.id}`,
-      type: 'group_created',
+      redirectId: event.id,
+      type: 'event_created',
       userIds,
     })
   }

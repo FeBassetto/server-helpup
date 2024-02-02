@@ -3,13 +3,10 @@ import { FriendshipsRepository } from '@/repositories/friendships-repository'
 export class GetFriendshipInvitationsUseCase {
   constructor(private friendshipRepository: FriendshipsRepository) {}
 
-  async execute(userId: string, offset: number, isSentInvites: boolean) {
+  async execute(userId: string, isSentInvites: boolean) {
     if (isSentInvites) {
       const friendshipSent =
-        await this.friendshipRepository.getSendFriendshipInvitates(
-          userId,
-          offset,
-        )
+        await this.friendshipRepository.getSendFriendshipInvitates(userId)
 
       const sentInvitations = friendshipSent.friendships.map((invitation) => {
         return {
@@ -27,7 +24,7 @@ export class GetFriendshipInvitationsUseCase {
     }
 
     const friendshipInvitations =
-      await this.friendshipRepository.getFriendshipInvitates(userId, offset)
+      await this.friendshipRepository.getFriendshipInvitates(userId)
 
     const invitations = friendshipInvitations.friendships.map((invitation) => {
       return {

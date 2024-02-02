@@ -34,24 +34,29 @@ export async function otherProfile(
   const getUserGroups = makeGetUserGroupsUseCase()
   const getUserEvents = makeGetUserEventsUseCase()
 
-  const [user, { friendShips, isFriends, totalPages }, groups, events] =
-    await Promise.all([
-      otherProfileUseCase.execute({ id: sub, userId }),
-      getFriendFriendshipUseCase.execute({
-        userId: sub,
-        friendId: userId,
-        offset,
-        query,
-      }),
-      getUserGroups.execute(userId, 0, ''),
-      getUserEvents.execute(userId, 0, ''),
-    ])
+  const [
+    user,
+    { friendShips, isFriends, totalPages, friendShipId },
+    groups,
+    events,
+  ] = await Promise.all([
+    otherProfileUseCase.execute({ id: sub, userId }),
+    getFriendFriendshipUseCase.execute({
+      userId: sub,
+      friendId: userId,
+      offset,
+      query,
+    }),
+    getUserGroups.execute(userId, 0, ''),
+    getUserEvents.execute(userId, 0, ''),
+  ])
 
   reply.status(200).send({
     user: {
       data: user,
       friendShips,
       isFriends,
+      friendShipId,
       totalFriendsPage: totalPages,
       groups,
       events,

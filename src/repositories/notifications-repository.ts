@@ -22,13 +22,9 @@ export interface NotificationRepository {
   markAllAsReadyByUserId(userId: string): Promise<void>
 
   getNotificationById(notificationId: string): Promise<Notification | null>
-  getNotificationsByUserId(
-    userId: string,
-    offset: number,
-  ): Promise<NotificationWithPagination>
+  getNotificationsByUserId(userId: string): Promise<NotificationWithPagination>
 
   getNewNotificationsByUserId(
     userId: string,
-    offset: number,
   ): Promise<NotificationWithPagination>
 }
