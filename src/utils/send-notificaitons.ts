@@ -25,7 +25,12 @@ export async function sendNotificationsUtils({
   type,
   redirectId,
 }: SendNotificationsUtils) {
-  await notificationRepository.createManyByUsersId(userIds, type, redirectId)
+  await notificationRepository.createManyByUsersId(
+    userIds,
+    type,
+    redirectId,
+    title,
+  )
 
   sendWsMessages(app, userIds, message, title)
 }

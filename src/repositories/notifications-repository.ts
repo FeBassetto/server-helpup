@@ -10,12 +10,14 @@ export interface NotificationRepository {
     userId: string,
     type: NotificationType,
     redirectId: string,
+    title: string,
   ): Promise<void>
 
   createManyByUsersId(
     usersId: string[],
     type: NotificationType,
     redirectId: string,
+    title: string,
   ): Promise<void>
 
   markAsReadById(notificationId: string): Promise<void>

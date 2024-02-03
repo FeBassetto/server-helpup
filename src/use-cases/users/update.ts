@@ -99,8 +99,15 @@ export class UpdateUseCase {
       )
     }
 
+    const {
+      neighborhood: neighborhoodContent,
+      street: streetContent,
+      number: numberContent,
+      ...dataWithoutNeighborhood
+    } = data
+
     const updatedData: Prisma.UserUpdateInput = {
-      ...data,
+      ...dataWithoutNeighborhood,
       profile_url: userImagePath,
       latitude,
       longitude,
@@ -109,6 +116,8 @@ export class UpdateUseCase {
     if (nick) {
       updatedData.nick = nick.toLowerCase()
     }
+
+    console.log(updatedData)
 
     const updatedUser = await this.usersRepository.updateUserById({
       data: updatedData,

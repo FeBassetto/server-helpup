@@ -22,10 +22,11 @@ export class PrismaNotificationRepository implements NotificationRepository {
     usersId: string[],
     type: NotificationType,
     redirectId: string,
+    title: string,
   ): Promise<void> {
     await prisma.notification.createMany({
       data: usersId.map((usersId) => {
-        return { redirect_id: redirectId, type, user_id: usersId }
+        return { redirect_id: redirectId, type, user_id: usersId, title }
       }),
     })
   }
@@ -34,12 +35,14 @@ export class PrismaNotificationRepository implements NotificationRepository {
     userId: string,
     type: NotificationType,
     redirectId: string,
+    title: string,
   ): Promise<void> {
     await prisma.notification.create({
       data: {
         type,
         user_id: userId,
         redirect_id: redirectId,
+        title,
       },
     })
   }

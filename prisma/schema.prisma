@@ -76,6 +76,7 @@ model Notification {
 
   type NotificationType
 
+  title       String
   redirect_id String
 
   read_at    DateTime?

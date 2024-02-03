@@ -8,7 +8,6 @@ export async function wsNotifications(
   req: FastifyRequest,
 ) {
   const { sub } = req.user
-  console.log('chegou')
 
   this.connections.set(sub, connection)
 
