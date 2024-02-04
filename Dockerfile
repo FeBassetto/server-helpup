@@ -8,6 +8,8 @@ RUN yarn install
 
 COPY . .
 
+RUN npx prisma generate
+
 EXPOSE 3333
 
 RUN yarn build

@@ -1,30 +1,30 @@
-name: Test and Deploy
+# name: Test and Deploy
 
-on:
-  push:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+# jobs:
+#   build-and-deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v2
 
-      - name: Login to Amazon EC2
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            cd var/www/server-helpup
-            git checkout .
-            git pull origin main
-            npx prisma migrate deploy
-            docker build -t helpup_server .
-            docker stop helpup_server_container || true
-            docker rm helpup_server_container || true
-            docker run -d -p 3333:3333 --name helpup_server_container helpup_server
-            docker system prune -a -f
+#       - name: Login to Amazon EC2
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.EC2_HOST }}
+#           username: ${{ secrets.EC2_USER }}
+#           key: ${{ secrets.EC2_SSH_KEY }}
+#           script: |
+#             cd var/www/server-helpup
+#             git checkout .
+#             git pull origin main
+#             npx prisma migrate deploy
+#             docker stop helpup_server_container || true
+#             docker rm helpup_server_container || true
+#             docker build -t helpup_server .
+#             docker run -d -p 3333:3333 --name helpup_server_container helpup_server
+#             docker system prune -a -f
