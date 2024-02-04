@@ -41,3 +41,6 @@
 - sudo systemctl restart nginx
 - sudo nginx -t
 
+- DATABASE_URL="postgresql://seu-usuario:sua-senha@aqui-o-endpoint-do-rds:5432/seu-banco-de-dados"
+- <identificador-da-instancia>.<nome-da-regiao>.rds.amazonaws.com
+- DATABASE_URL="postgresql://bassetto:bassettopass@helpup-db-ps.sa-east-1c.rds.amazonaws.com:5432/helpup"
